@@ -1,0 +1,43 @@
+= Documentation
+
+[.lead]
+Quotes for developers, from developers!
+
+== About
+
+This is a small application that will send a daily quote to developers from respected developers, via SMS and email.
+
+Users can SMS "_Get Quote_" to a pre-defined number and receive daily developer quotes to their mobile phones until they text "_Stop Quote_".
+Users can also submit their email address via a web form to get daily developer quotes via email.
+I'm not sure how to go about unsubscribing yet.
+Perhaps they could email an email endpoint with "unsubscribe", and after verification that the email came from the actual sender, the emails would then stop.
+
+=== Routes
+
+[cols="1,1",options="header"]
+|===
+|Route|Description/Reason|Handler
+
+|`/api/subscribe/sms`
+|This endpoint accepts calls from a Twilio webhook and subscribes the supplied phone number to receive a daily developer quote SMS.
+This endpoint only requires the body to contain a phone number in E.164 format.
+|`SmsSubscribeHandler`
+
+|`/api/subscribe/email`
+|This endpoint subscribes the supplied email address to receive daily developer quotes to the supplied email address.
+This endpoint only requires the body to contain an email address.
+|`EmailSubscribeHandler`
+
+|`/api/unsubscribe/sms`
+|This endpoint accepts calls from a Twilio webhook and unsubscribes the supplied phone number from receiving daily developer quote SMS.
+This endpoint only requires the body to contain a phone number in E.164 format.
+|`SmsUnsubscribeHandler`
+
+|`/api/unsubscribe/email`
+|This endpoint unsubscribes the supplied email address from receiving daily developer quotes.
+This endpoint only requires the body to contain an email address.
+|`EmailUnsubscribeHandler`
+|===
+
+== Schema Design
+
