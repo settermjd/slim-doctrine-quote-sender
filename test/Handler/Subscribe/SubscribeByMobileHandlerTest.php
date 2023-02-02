@@ -6,27 +6,35 @@ use App\Domain\User;
 use App\Handler\Subscribe\SubscribeByMobileHandler;
 use App\UserService;
 use Laminas\Diactoros\Response\XmlResponse;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class SubscribeByMobileHandlerTest extends TestCase
 {
+    private MockObject|ServerRequestInterface $request;
+    private MockObject|UserService $userService;
+
+    public function setUp(): void
+    {
+        $this->request = $this->createMock(ServerRequestInterface::class);
+        $this->userService = $this->createMock(UserService::class);
+    }
+
     public function testCanSubscribeUserByMobile()
     {
         $mobileNumber = '+14155552672';
         $user = new User('', null, $mobileNumber);
 
-        $userService = $this->createMock(UserService::class);
-        $userService
+        $this->userService
             ->expects($this->once())
             ->method('createWithMobileNumber')
             ->with($mobileNumber)
             ->willReturn($user);
 
-        $handler = new SubscribeByMobileHandler($userService);
-        $request = $this->createMock(ServerRequestInterface::class);
-        $request
+        $handler = new SubscribeByMobileHandler($this->userService);
+        $this->request
             ->expects($this->once())
             ->method('getParsedBody')
             ->willReturn([
@@ -35,7 +43,7 @@ class SubscribeByMobileHandlerTest extends TestCase
             ]);
         $response = $this->createMock(ResponseInterface::class);
 
-        $result = $handler->handle($request, $response, []);
+        $result = $handler->handle($this->request, $response, []);
 
         $this->assertInstanceOf(XmlResponse::class, $result);
 
@@ -46,5 +54,49 @@ To unsubscribe, send another SMS to this number with the text: UNSUBSCRIBE</Mess
 
 EOF;
         $this->assertSame($twiml, $result->getBody()->getContents());
+    }
+
+    /**
+     * @dataProvider invalidMobileNumberProvider
+     */
+    public function testCannotSubscribeUserByMobileWithAnInvalidMobileNumber(string $mobileNumber = null)
+    {
+        $user = new User(null, null, $mobileNumber);
+
+        $this->userService
+            ->expects($this->never())
+            ->method('createWithMobileNumber')
+            ->with($mobileNumber)
+            ->willReturn($user);
+
+        $handler = new SubscribeByMobileHandler($this->userService);
+        $this->request
+            ->expects($this->once())
+            ->method('getParsedBody')
+            ->willReturn([
+                'From' => $mobileNumber,
+                'Body' => 'SUBSCRIBE',
+            ]);
+        $response = $this->createMock(ResponseInterface::class);
+
+        $result = $handler->handle($this->request, $response, []);
+
+        $this->assertInstanceOf(XmlResponse::class, $result);
+
+        $twiml = <<<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<Response><Message>Mobile number must be in E.164 format. More information is available at https://www.twilio.com/docs/glossary/what-e164.</Message></Response>
+
+EOF;
+        $this->assertSame($twiml, $result->getBody()->getContents());
+    }
+
+    public function invalidMobileNumberProvider()
+    {
+        return [
+            [
+                '04155552672',
+            ],
+        ];
     }
 }
