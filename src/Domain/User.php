@@ -36,8 +36,8 @@ class User
     ]
     private string|null $userId = null;
 
-    #[Column(name: "full_name", type: 'string', length: 36, unique: true, nullable: false)]
-    private string $fullName;
+    #[Column(name: "full_name", type: 'string', length: 36, unique: true, nullable: true)]
+    private string|null $fullName;
 
     #[Column(name: "mobile_number", type: 'string', length: 18, unique: true, nullable: true)]
     private string|null $mobileNumber = null;
@@ -59,7 +59,7 @@ class User
     #[InverseJoinColumn(name: 'quote_id', referencedColumnName: 'quote_id')]
     private Collection $quotes;
 
-    public function __construct(string $fullName, string $emailAddress = null, string $mobileNumber = null)
+    public function __construct(string $fullName = null, string $emailAddress = null, string $mobileNumber = null)
     {
         $this->registeredAt = new DateTimeImmutable('now');
         $this->emailAddress = $emailAddress;
@@ -73,17 +73,17 @@ class User
         return $this->userId;
     }
 
-    public function getEmailAddress(): string
+    public function getEmailAddress(): ?string
     {
         return $this->emailAddress;
     }
 
-    public function getFullName(): string
+    public function getFullName(): ?string
     {
         return $this->fullName;
     }
 
-    public function getMobileNumber(): string
+    public function getMobileNumber(): ?string
     {
         return $this->mobileNumber;
     }
