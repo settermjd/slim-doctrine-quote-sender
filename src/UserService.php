@@ -18,7 +18,7 @@ class UserService
         $this->em = $em;
     }
 
-    public function createNewUser(string $fullName, string $emailAddress, string $mobileNumber = null): User
+    public function create(string $fullName, string $emailAddress, string $mobileNumber = null): User
     {
         $newUser = new User($fullName, $emailAddress, $mobileNumber);
 

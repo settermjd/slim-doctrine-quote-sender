@@ -28,7 +28,7 @@ $app->get('/create-user', function (Request $request, Response $response, $args)
     /** @var UserService $userService */
     $userService = $this->get(UserService::class);
 
-    $userService->createNewUser($fullName, $emailAddress);
+    $userService->create($fullName, $emailAddress);
     $response->getBody()->write("New user created!");
 
     return $response;

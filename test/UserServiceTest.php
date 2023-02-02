@@ -58,7 +58,7 @@ class UserServiceTest extends TestCase
         string $mobileNumber = null
     ) {
         $userService = new UserService($this->entityManager);
-        $user = $userService->createNewUser($fullName, $emailAddress, $mobileNumber);
+        $user = $userService->create($fullName, $emailAddress, $mobileNumber);
 
         $this->assertInstanceOf(User::class, $user);
         $this->assertTrue($this->entityManager->contains($user));
@@ -93,7 +93,7 @@ class UserServiceTest extends TestCase
             'Mobile number must be in E.164 format. More information is available at https://www.twilio.com/docs/glossary/what-e164.'
         );
         $userService = new UserService($this->entityManager);
-        $userService->createNewUser($fullName, $emailAddress, $mobileNumber);
+        $userService->create($fullName, $emailAddress, $mobileNumber);
     }
 
     public function invalidMobilePhoneNumberDataProvider(): array
@@ -125,7 +125,7 @@ class UserServiceTest extends TestCase
             'Email address must be a valid email address.'
         );
         $userService = new UserService($this->entityManager);
-        $userService->createNewUser($fullName, $emailAddress, $mobileNumber);
+        $userService->create($fullName, $emailAddress, $mobileNumber);
     }
 
     public function invalidEmailAddressDataProvider(): array
