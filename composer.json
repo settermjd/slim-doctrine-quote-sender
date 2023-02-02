@@ -30,6 +30,7 @@
         "serve": [
             "php -S 0.0.0.0:8080 -t public/"
         ],
-        "test": "phpunit --colors=always"
+        "test": "phpunit --colors=always",
+        "docker-test": "docker compose exec php composer test"
     }
 }
