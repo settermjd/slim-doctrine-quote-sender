@@ -27,6 +27,16 @@ class UserService
         return $newUser;
     }
 
+    public function createWithMobileNumber(string $mobileNumber)
+    {
+        $newUser = new User(null, null, $mobileNumber);
+
+        $this->em->persist($newUser);
+        $this->em->flush();
+
+        return $newUser;
+    }
+
     public function findByMobileNumber(string $mobileNumber): User|null
     {
         return $this->em

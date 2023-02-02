@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Handler\Subscribe\SubscribeByMobileHandler;
 use App\UserService;
 use DI\Container;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -21,17 +22,14 @@ $app->get('/', function (Request $request, Response $response, $args) {
     return $response;
 });
 
-$app->get('/create-user', function (Request $request, Response $response, $args) {
-    $emailAddress = "matthew@matthewsetter.com";
-    $fullName = "Matthew Setter";
+$app->group('/api', function () use ($app) {
 
-    /** @var UserService $userService */
-    $userService = $this->get(UserService::class);
+    $app->group('/subscribe', function () use ($app) {
 
-    $userService->create($fullName, $emailAddress);
-    $response->getBody()->write("New user created!");
+        $app->post('/by-mobile-number', [SubscribeByMobileHandler::class, 'handle']);
 
-    return $response;
+    });
+
 });
 
 $app->run();

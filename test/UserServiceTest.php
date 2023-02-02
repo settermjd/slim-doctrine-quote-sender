@@ -82,6 +82,14 @@ class UserServiceTest extends TestCase
         ];
     }
 
+    public function testUserServiceCanCreateNewUserWithMobileNumber() {
+        $userService = new UserService($this->entityManager);
+        $user = $userService->createWithMobileNumber('+14155552671');
+
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertTrue($this->entityManager->contains($user));
+    }
+
     /**
      * @dataProvider invalidMobilePhoneNumberDataProvider
      */
