@@ -158,6 +158,22 @@ class UserServiceTest extends TestCase
         $this->assertInstanceOf(User::class, $user);
     }
 
+    public function testWillReturnNullIfUserCannotBeFoundByMobileNumber()
+    {
+        $this->assertNull(
+            (new UserService($this->entityManager))
+                ->findByMobileNumber('+14155552679')
+        );
+    }
+
+    public function testWillReturnNullIfUserCannotBeFoundByEmailAddress()
+    {
+        $this->assertNull(
+            (new UserService($this->entityManager))
+                ->findByEmailAddress('non-existent-user@example.org')
+        );
+    }
+
     public function testCanRetrieveListOfUnviewedQuotes()
     {
         /** @var User $user */

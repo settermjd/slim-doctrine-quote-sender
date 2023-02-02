@@ -28,7 +28,7 @@ class UserService
         return $newUser;
     }
 
-    public function findByMobileNumber(string $mobileNumber): User
+    public function findByMobileNumber(string $mobileNumber): User|null
     {
         return $this->em
             ->getRepository(User::class)
@@ -39,7 +39,7 @@ class UserService
             );
     }
 
-    public function findByEmailAddress(string $emailAddress): User
+    public function findByEmailAddress(string $emailAddress): User|null
     {
         return $this->em
             ->getRepository(User::class)
