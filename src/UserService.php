@@ -6,7 +6,6 @@ namespace App;
 
 use App\Domain\Quote;
 use App\Domain\User;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
 
 class UserService
