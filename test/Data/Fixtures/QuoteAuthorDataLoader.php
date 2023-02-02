@@ -12,7 +12,12 @@ class QuoteAuthorDataLoader extends AbstractFixture
     {
         $data = [
             'Anonymous',
+            'Antoine de Saint-Exupery',
             'Brian Kernighan',
+            'Chris Heilman',
+            'Dan Salomon',
+            'John Johnson',
+            'Martin Fowler',
         ];
 
         foreach ($data as $fullName) {

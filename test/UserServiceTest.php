@@ -3,6 +3,7 @@
 namespace AppTest;
 
 use App\Domain\User;
+use App\QuoteType;
 use App\UserService;
 use AppTest\Data\Fixtures\QuoteAuthorDataLoader;
 use AppTest\Data\Fixtures\QuoteDataLoader;
@@ -186,6 +187,28 @@ class UserServiceTest extends TestCase
             );
 
         $userService = new UserService($this->entityManager);
-        $this->assertCount(1, $userService->getUnviewedQuotesForUser($user));
+        $this->assertCount(
+            6,
+            $userService->getQuotes($user, QuoteType::Unviewed)
+        );
+    }
+
+    public function testCanRetrieveListOfViewedQuotes()
+    {
+        /** @var User $user */
+        $user = $this->entityManager
+            ->getRepository(User::class)
+            ->findOneBy(
+                [
+                    'emailAddress' => 'user2@example.org',
+                ]
+            );
+
+        $userService = new UserService($this->entityManager);
+        $this->assertCount(
+            1,
+            $userService->getQuotes($user, QuoteType::Viewed)
+        );
+    }
     }
 }

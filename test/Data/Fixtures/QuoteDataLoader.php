@@ -13,7 +13,12 @@ class QuoteDataLoader extends AbstractFixture
     {
         $data = [
             'Anonymous' => "Dont't worry if it doesn't work right. If everything did, you'd be out of a job.",
+            'Antoine de Saint-Exupery' => "Perfection is achieved not when there is nothing more to add, but rather when there is nothing more to take away.",
             'Brian Kernighan' => "Don't comment bad code - rewrite it.",
+            'Chris Heilman' => "Java is to JavaScript what car is to Carpet.",
+            'Dan Salomon' => "Sometimes it pays to stay in bed on Monday, rather than spending the rest of the week debugging Monday’s code.",
+            'John Johnson' => "First, solve the problem. Then, write the code.",
+            'Martin Fowler' => "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
         ];
 
         foreach ($data as $authorName => $quoteText) {

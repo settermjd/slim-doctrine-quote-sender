@@ -53,7 +53,7 @@ class UserService
     /**
      * @return array<int,Quote>
      */
-    public function getUnviewedQuotesForUser(User $user): array
+    public function getQuotes(User $user, QuoteType $quoteType): array
     {
         $queryBuilder = $this->em->createQueryBuilder();
         $viewedQuotes = $user->getViewedQuotes();
@@ -63,10 +63,15 @@ class UserService
             $quotes[] = $viewedQuote->getQuoteId();
         }
 
+        $wherePredicate = match($quoteType) {
+            QuoteType::Viewed => $queryBuilder->expr()->in('q.quoteId', $quotes),
+            QuoteType::Unviewed => $queryBuilder->expr()->notIn('q.quoteId', $quotes),
+        };
+
         return $queryBuilder
             ->select('q')
             ->from(Quote::class, 'q')
-            ->where($queryBuilder->expr()->notIn('q.quoteId', $quotes))
+            ->where($wherePredicate)
             ->getQuery()
             ->getResult();
     }
