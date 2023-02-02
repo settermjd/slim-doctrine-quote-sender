@@ -2,6 +2,7 @@
 
 namespace AppTest;
 
+use App\Domain\Quote;
 use App\Domain\User;
 use App\QuoteType;
 use App\UserService;
