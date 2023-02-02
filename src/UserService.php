@@ -76,4 +76,32 @@ class UserService
             ->getResult();
     }
 
+    public function removeByMobileNumber(string $mobileNumber): bool
+    {
+        $user = $this->em
+            ->getRepository(User::class)
+            ->findOneBy(
+                [
+                    'mobileNumber' => $mobileNumber,
+                ]
+            );
+        $this->em->remove($user);
+
+        return true;
+    }
+
+    public function removeByEmailAddress(string $emailAddress): bool
+    {
+        $user = $this->em
+            ->getRepository(User::class)
+            ->findOneBy(
+                [
+                    'emailAddress' => $emailAddress,
+                ]
+            );
+        $this->em->remove($user);
+
+        return true;
+    }
+
 }

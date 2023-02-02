@@ -210,5 +210,36 @@ class UserServiceTest extends TestCase
             $userService->getQuotes($user, QuoteType::Viewed)
         );
     }
+
+    public function testCanDeleteUserByMobileNumber()
+    {
+        $mobileNumber = '+14155552672';
+
+        /** @var User $user */
+        $user = $this->entityManager
+            ->getRepository(User::class)
+            ->findOneBy(['mobileNumber' => $mobileNumber]);
+
+        $this->assertTrue(
+            (new UserService($this->entityManager))
+                ->removeByMobileNumber($mobileNumber)
+        );
+        $this->assertFalse($this->entityManager->contains($user));
+    }
+
+    public function testCanDeleteUserByEmailAddress()
+    {
+        $emailAddress = 'user2@example.org';
+
+        /** @var User $user */
+        $user = $this->entityManager
+            ->getRepository(User::class)
+            ->findOneBy(['emailAddress' => $emailAddress]);
+
+        $this->assertTrue(
+            (new UserService($this->entityManager))
+                ->removeByEmailAddress($emailAddress)
+        );
+        $this->assertFalse($this->entityManager->contains($user));
     }
 }
