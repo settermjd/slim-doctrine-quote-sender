@@ -2,6 +2,7 @@
 
 namespace App\Handler\Subscribe;
 
+use App\Handler\EmailHandlerTrait;
 use App\UserService;
 use Laminas\Diactoros\Response\RedirectResponse;
 use Laminas\InputFilter\InputFilterInterface;
@@ -12,6 +13,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class SubscribeByEmailHandler
 {
+    use EmailHandlerTrait;
+
     private InputFilterInterface $inputFilter;
     private UserService $userService;
 
@@ -35,9 +38,9 @@ class SubscribeByEmailHandler
                     $this->inputFilter->getValue('email')
                 );
 
-            $flashMessage->flash('status', 'You were successfully subscribed');
+            $flashMessage->flash('status', self::RESPONSE_MESSAGE_SUBSCRIBE_SUCCESS);
         } else {
-            $flashMessage->flash('status', 'The email address provided is not a valid email address.');
+            $flashMessage->flash('status', self::RESPONSE_MESSAGE_FAIL_INVALID_EMAIL);
         }
 
         return new RedirectResponse('/api/subscribe/by-email-address');

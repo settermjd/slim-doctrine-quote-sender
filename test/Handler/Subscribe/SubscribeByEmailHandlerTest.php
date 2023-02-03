@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AppTest\Handler\Subscribe;
 
 use App\Domain\User;
+use App\Handler\EmailHandlerTrait;
 use App\Handler\Subscribe\SubscribeByEmailHandler;
 use App\InputFilter\EmailInputFilter;
 use App\UserService;
@@ -18,6 +19,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class SubscribeByEmailHandlerTest extends TestCase
 {
+    use EmailHandlerTrait;
+
     private MockObject|FlashMessagesInterface $flashMessage;
     private ServerRequestInterface|MockObject $request;
     private UserService|MockObject $userService;
@@ -32,13 +35,12 @@ class SubscribeByEmailHandlerTest extends TestCase
     public function testCanSubscribeUsersByEmailAddressAndRedirectBackToTheOriginalForm()
     {
         $emailAddress = 'email-address-user@example.org';
-        $status = 'You were successfully subscribed';
         $user = new User(null, $emailAddress, null);
 
         $this->flashMessage
             ->expects($this->once())
             ->method('flash')
-            ->with('status', $status);
+            ->with('status', self::RESPONSE_MESSAGE_SUBSCRIBE_SUCCESS);
 
         $this->userService
             ->expects($this->once())
@@ -69,11 +71,10 @@ class SubscribeByEmailHandlerTest extends TestCase
     public function testCanHandleInvalidFormSubmissions()
     {
         $emailAddress = '@example.org';
-        $status = 'The email address provided is not a valid email address.';
         $this->flashMessage
             ->expects($this->once())
             ->method('flash')
-            ->with('status', $status);
+            ->with('status', self::RESPONSE_MESSAGE_FAIL_INVALID_EMAIL);
 
         $this->userService
             ->expects($this->never())
