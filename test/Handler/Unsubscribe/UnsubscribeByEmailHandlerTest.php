@@ -4,12 +4,9 @@ namespace AppTest\Handler\Unsubscribe;
 
 use App\Handler\EmailHandlerTrait;
 use App\Handler\Unsubscribe\UnsubscribeByEmailHandler;
-use App\Handler\Unsubscribe\UnsubscribeByMobileHandler;
 use App\InputFilter\EmailInputFilter;
-use App\InputFilter\MobileNumberInputFilter;
 use App\UserService;
 use Laminas\Diactoros\Response\RedirectResponse;
-use Laminas\Diactoros\Response\XmlResponse;
 use Mezzio\Flash\FlashMessageMiddleware;
 use Mezzio\Flash\FlashMessagesInterface;
 use PHPUnit\Framework\MockObject\MockObject;
