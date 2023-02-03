@@ -8,8 +8,9 @@ use App\Domain\User;
 use App\Handler\Subscribe\SubscribeByEmailHandler;
 use App\InputFilter\EmailInputFilter;
 use App\UserService;
-use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Diactoros\Response\RedirectResponse;
+use Mezzio\Flash\FlashMessageMiddleware;
+use Mezzio\Flash\FlashMessagesInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
@@ -17,11 +18,13 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class SubscribeByEmailHandlerTest extends TestCase
 {
+    private MockObject|FlashMessagesInterface $flashMessage;
     private ServerRequestInterface|MockObject $request;
     private UserService|MockObject $userService;
 
     public function setUp(): void
     {
+        $this->flashMessage = $this->createMock(FlashMessagesInterface::class);
         $this->request = $this->createMock(ServerRequestInterface::class);
         $this->userService = $this->createMock(UserService::class);
     }
@@ -29,7 +32,13 @@ class SubscribeByEmailHandlerTest extends TestCase
     public function testCanSubscribeUsersByEmailAddressAndRedirectBackToTheOriginalForm()
     {
         $emailAddress = 'email-address-user@example.org';
+        $status = 'You were successfully subscribed';
         $user = new User(null, $emailAddress, null);
+
+        $this->flashMessage
+            ->expects($this->once())
+            ->method('flash')
+            ->with('status', $status);
 
         $this->userService
             ->expects($this->once())
@@ -43,6 +52,44 @@ class SubscribeByEmailHandlerTest extends TestCase
             ->willReturn([
                 'email' => $emailAddress
             ]);
+        $this->request
+            ->expects($this->once())
+            ->method('getAttribute')
+            ->with(FlashMessageMiddleware::FLASH_ATTRIBUTE)
+            ->willReturn($this->flashMessage);
+
+        $handler = new SubscribeByEmailHandler($this->userService, new EmailInputFilter());
+        $response = $this->createMock(ResponseInterface::class);
+        $result = $handler->handle($this->request, $response, []);
+
+        $this->assertInstanceOf(RedirectResponse::class, $result);
+        $this->assertSame('/api/subscribe/by-email-address', $result->getHeaderLine('location'));
+    }
+
+    public function testCanHandleInvalidFormSubmissions()
+    {
+        $emailAddress = '@example.org';
+        $status = 'The email address provided is not a valid email address.';
+        $this->flashMessage
+            ->expects($this->once())
+            ->method('flash')
+            ->with('status', $status);
+
+        $this->userService
+            ->expects($this->never())
+            ->method('createWithEmailAddress');
+
+        $this->request
+            ->expects($this->once())
+            ->method('getParsedBody')
+            ->willReturn([
+                'email' => $emailAddress
+            ]);
+        $this->request
+            ->expects($this->once())
+            ->method('getAttribute')
+            ->with(FlashMessageMiddleware::FLASH_ATTRIBUTE)
+            ->willReturn($this->flashMessage);
 
         $handler = new SubscribeByEmailHandler($this->userService, new EmailInputFilter());
         $response = $this->createMock(ResponseInterface::class);
