@@ -27,7 +27,7 @@ class UserService
         return $newUser;
     }
 
-    public function createWithMobileNumber(string $mobileNumber)
+    public function createWithMobileNumber(string $mobileNumber): User
     {
         $newUser = new User(null, null, $mobileNumber);
 
