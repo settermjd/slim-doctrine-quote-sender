@@ -90,6 +90,15 @@ class UserServiceTest extends TestCase
         $this->assertTrue($this->entityManager->contains($user));
     }
 
+    public function testCanCreateNewUserWithEmailAddress()
+    {
+        $userService = new UserService($this->entityManager);
+        $user = $userService->createWithEmailAddress('email-address-user@example.org');
+
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertTrue($this->entityManager->contains($user));
+    }
+
     /**
      * @dataProvider invalidMobilePhoneNumberDataProvider
      */
