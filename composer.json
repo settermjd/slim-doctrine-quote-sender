@@ -12,7 +12,9 @@
         "doctrine/common": "^3.4",
         "laminas/laminas-validator": "^2.30",
         "twilio/sdk": "^6.44",
-        "laminas/laminas-inputfilter": "*"
+        "laminas/laminas-inputfilter": "*",
+        "mezzio/mezzio-flash": "^1.6",
+        "mezzio/mezzio-twigrenderer": "^2.13"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5",
