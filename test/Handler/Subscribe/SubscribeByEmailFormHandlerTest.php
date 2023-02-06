@@ -2,6 +2,7 @@
 
 namespace AppTest\Handler\Subscribe;
 
+use App\Handler\EmailHandlerTrait;
 use App\Handler\Subscribe\SubscribeByEmailFormHandler;
 use Mezzio\Flash\FlashMessageMiddleware;
 use Mezzio\Flash\FlashMessagesInterface;
@@ -13,6 +14,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class SubscribeByEmailFormHandlerTest extends TestCase
 {
+    use EmailHandlerTrait;
+
     private ServerRequestInterface|MockObject $request;
 
     public function setUp(): void
@@ -37,14 +40,12 @@ class SubscribeByEmailFormHandlerTest extends TestCase
 
     public function testWillRenderFlashMessageIfMessageIsAvailable()
     {
-        $status = 'You were successfully subscribed';
-
         $flashMessage = $this->createMock(FlashMessagesInterface::class);
         $flashMessage
             ->expects($this->exactly(2))
             ->method('getFlash')
             ->with('status')
-            ->willReturn($status);
+            ->willReturn(self::RESPONSE_MESSAGE_SUBSCRIBE_SUCCESS);
 
         $this->request
             ->expects($this->once())
@@ -59,7 +60,7 @@ class SubscribeByEmailFormHandlerTest extends TestCase
             ->with(
                 'app::subscribe-by-email',
                 [
-                    'status' => $status,
+                    'status' => self::RESPONSE_MESSAGE_SUBSCRIBE_SUCCESS,
                 ]
             )
             ->willReturn('');
