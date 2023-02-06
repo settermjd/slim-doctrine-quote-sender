@@ -13,11 +13,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class SubscribeByEmailFormHandler
 {
-    private TemplateRendererInterface $renderer;
-
-    public function __construct(TemplateRendererInterface $renderer)
+    public function __construct(private TemplateRendererInterface $renderer)
     {
-        $this->renderer = $renderer;
     }
 
     public function handle(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface

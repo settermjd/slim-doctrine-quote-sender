@@ -18,13 +18,8 @@ EOF;
 
     public const RESPONSE_MESSAGE_INVALID_MOBILE_NUMBER = 'Mobile number must be in E.164 format. More information is available at https://www.twilio.com/docs/glossary/what-e164.';
 
-    private InputFilterInterface $inputFilter;
-    private UserService $userService;
-
-    public function __construct(UserService $userService, InputFilterInterface $inputFilter)
+    public function __construct(private UserService $userService, private InputFilterInterface $inputFilter)
     {
-        $this->inputFilter = $inputFilter;
-        $this->userService = $userService;
     }
 
     public function handle(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface

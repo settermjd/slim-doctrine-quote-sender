@@ -10,11 +10,8 @@ use Doctrine\ORM\EntityManager;
 
 class QuoteService
 {
-    private EntityManager $em;
-
-    public function __construct(EntityManager $em)
+    public function __construct(private EntityManager $em)
     {
-        $this->em = $em;
     }
 
     /**
