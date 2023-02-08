@@ -91,7 +91,7 @@ EOF;
         $this->assertSame($twiml, $result->getBody()->getContents());
     }
 
-    public function invalidMobileNumberProvider()
+    public static function invalidMobileNumberProvider()
     {
         return [
             [

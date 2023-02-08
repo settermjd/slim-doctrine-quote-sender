@@ -20,7 +20,7 @@ class EmailInputFilterTest extends TestCase
         $this->assertSame($isValid, $inputFilter->isValid());
     }
 
-    public function emailInputProvider()
+    public static function emailInputProvider()
     {
         return [
             [

@@ -19,7 +19,7 @@ class MobileNumberInputFilterTest extends TestCase
         $this->assertSame($isValid, $inputFilter->isValid());
     }
 
-    public function mobileNumberInputProvider(): array
+    public static function mobileNumberInputProvider(): array
     {
         return [
             [

@@ -66,7 +66,7 @@ class UserServiceTest extends TestCase
         $this->assertTrue($this->entityManager->contains($user));
     }
 
-    public function createUserDataProvider(): array
+    public static function createUserDataProvider(): array
     {
         return [
             [
@@ -116,7 +116,7 @@ class UserServiceTest extends TestCase
         $userService->create($fullName, $emailAddress, $mobileNumber);
     }
 
-    public function invalidMobilePhoneNumberDataProvider(): array
+    public static function invalidMobilePhoneNumberDataProvider(): array
     {
         return [
             [
@@ -148,7 +148,7 @@ class UserServiceTest extends TestCase
         $userService->create($fullName, $emailAddress, $mobileNumber);
     }
 
-    public function invalidEmailAddressDataProvider(): array
+    public static function invalidEmailAddressDataProvider(): array
     {
         return [
             [
