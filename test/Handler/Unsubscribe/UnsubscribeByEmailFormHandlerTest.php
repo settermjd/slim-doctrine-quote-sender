@@ -4,13 +4,13 @@ namespace AppTest\Handler\Unsubscribe;
 
 use App\Handler\EmailHandlerTrait;
 use App\Handler\Unsubscribe\UnsubscribeByEmailFormHandler;
-use Mezzio\Flash\FlashMessageMiddleware;
 use Mezzio\Flash\FlashMessagesInterface;
 use Mezzio\Template\TemplateRendererInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Slim\Views\Twig;
 
 class UnsubscribeByEmailFormHandlerTest extends TestCase
 {
@@ -27,48 +27,82 @@ class UnsubscribeByEmailFormHandlerTest extends TestCase
 
     public function testCanSuccessfullyHandleRequests()
     {
-        $this->renderer
+        $response = $this->createMock(ResponseInterface::class);
+
+        $twig = $this->createMock(Twig::class);
+        $twig
             ->expects($this->once())
             ->method('render')
-            ->with(UnsubscribeByEmailFormHandler::TEMPLATE_NAME, $this->isType('array'))
-            ->willReturn('');
+            ->with(
+                $response,
+                UnsubscribeByEmailFormHandler::TEMPLATE_NAME,
+                $this->isType('array')
+            )
+            ->willReturn($this->createMock(ResponseInterface::class));
 
-        $handler = new UnsubscribeByEmailFormHandler($this->renderer);
-        $response = $handler->handle($this->request, $this->createMock(ResponseInterface::class), []);
+        $flashMessage = $this->createMock(FlashMessagesInterface::class);
+        $flashMessage
+            ->expects($this->once())
+            ->method('getFlashes')
+            ->willReturn(
+                ['status' => self::RESPONSE_MESSAGE_UNSUBSCRIBE_SUCCESS]
+            );
+
+        $this->request
+            ->expects($this->exactly(2))
+            ->method('getAttribute')
+            ->willReturnOnConsecutiveCalls($twig, $flashMessage);
+
+        $handler = new UnsubscribeByEmailFormHandler();
+        $response = $handler->handle($this->request, $response, []);
 
         $this->assertInstanceOf(ResponseInterface::class, $response);
     }
 
-    public function testWillRenderFlashMessageIfMessageIsAvailable()
+    /**
+     * @dataProvider flashMessageProvider
+     */
+    public function testWillRenderFlashMessageIfMessageIsAvailable(array $flashes)
     {
-        $flashMessage = $this->createMock(FlashMessagesInterface::class);
-        $flashMessage
-            ->expects($this->exactly(2))
-            ->method('getFlash')
-            ->with('status')
-            ->willReturn(self::RESPONSE_MESSAGE_UNSUBSCRIBE_SUCCESS);
+        $response = $this->createMock(ResponseInterface::class);
 
-        $this->request
-            ->expects($this->once())
-            ->method('getAttribute')
-            ->with(FlashMessageMiddleware::FLASH_ATTRIBUTE)
-            ->willReturn($flashMessage);
-
-        $this->renderer = $this->createMock(TemplateRendererInterface::class);
-        $this->renderer
+        $twig = $this->createMock(Twig::class);
+        $twig
             ->expects($this->once())
             ->method('render')
             ->with(
+                $response,
                 UnsubscribeByEmailFormHandler::TEMPLATE_NAME,
-                [
-                    'status' => self::RESPONSE_MESSAGE_UNSUBSCRIBE_SUCCESS,
-                ]
+                $flashes
             )
-            ->willReturn('');
+            ->willReturn($this->createMock(ResponseInterface::class));
 
-        $handler = new UnsubscribeByEmailFormHandler($this->renderer);
-        $response = $handler->handle($this->request, $this->createMock(ResponseInterface::class), []);
+        $flashMessage = $this->createMock(FlashMessagesInterface::class);
+        $flashMessage
+            ->expects($this->once())
+            ->method('getFlashes')
+            ->willReturn($flashes);
 
-        $this->assertInstanceOf(ResponseInterface::class, $response);
+        $this->request
+            ->expects($this->exactly(2))
+            ->method('getAttribute')
+            ->willReturnOnConsecutiveCalls($twig, $flashMessage);
+
+        $handler = new UnsubscribeByEmailFormHandler();
+        $result = $handler->handle($this->request, $this->createMock(ResponseInterface::class), []);
+
+        $this->assertInstanceOf(ResponseInterface::class, $result);
+    }
+
+    public static function flashMessageProvider(): array
+    {
+        return [
+            [
+                ['status' => self::RESPONSE_MESSAGE_UNSUBSCRIBE_SUCCESS]
+            ],
+            [
+                ['error' => self::RESPONSE_MESSAGE_FAIL_INVALID_EMAIL]
+            ]
+        ];
     }
 }
