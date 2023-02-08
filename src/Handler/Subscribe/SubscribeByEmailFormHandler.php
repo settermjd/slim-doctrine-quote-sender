@@ -23,8 +23,14 @@ class SubscribeByEmailFormHandler
 
         /** @var FlashMessagesInterface $flashMessage */
         $flashMessage = $request->getAttribute(FlashMessageMiddleware::FLASH_ATTRIBUTE);
-        if (! is_null($flashMessage) && ! is_null($flashMessage->getFlash('status'))) {
-            $data['status'] = $flashMessage->getFlash('status');
+        if (! is_null($flashMessage)) {
+            $flashes = $flashMessage->getFlashes();
+            if (array_key_exists('status', $flashes)) {
+                $data['status'] = $flashes['status'];
+            }
+            if (array_key_exists('error', $flashes)) {
+                $data['error'] = $flashes['error'];
+            }
         }
 
         return new HtmlResponse($this->renderer->render('app::subscribe-by-email', $data));

@@ -38,14 +38,29 @@ class SubscribeByEmailFormHandlerTest extends TestCase
         $this->assertInstanceOf(ResponseInterface::class, $response);
     }
 
-    public function testWillRenderFlashMessageIfMessageIsAvailable()
+    /**
+     * @dataProvider flashMessageProvider
+     */
+    public function testWillRenderFlashMessageIfMessageIsAvailable(array $flashes)
     {
+        $response = $this->createMock(ResponseInterface::class);
+
+        $twig = $this->createMock(Twig::class);
+        $twig
+            ->expects($this->once())
+            ->method('render')
+            ->with(
+                $response,
+                SubscribeByEmailFormHandler::TEMPLATE_NAME,
+                $flashes
+            )
+            ->willReturn($this->createMock(ResponseInterface::class));
+
         $flashMessage = $this->createMock(FlashMessagesInterface::class);
         $flashMessage
-            ->expects($this->exactly(2))
-            ->method('getFlash')
-            ->with('status')
-            ->willReturn(self::RESPONSE_MESSAGE_SUBSCRIBE_SUCCESS);
+            ->expects($this->once())
+            ->method('getFlashes')
+            ->willReturn($flashes);
 
         $this->request
             ->expects($this->once())
@@ -68,6 +83,15 @@ class SubscribeByEmailFormHandlerTest extends TestCase
         $handler = new SubscribeByEmailFormHandler($renderer);
         $response = $handler->handle($this->request, $this->createMock(ResponseInterface::class), []);
 
-        $this->assertInstanceOf(ResponseInterface::class, $response);
+    public static function flashMessageProvider(): array
+    {
+        return [
+            [
+                ['status' => self::RESPONSE_MESSAGE_SUBSCRIBE_SUCCESS]
+            ],
+            [
+                ['error' => self::RESPONSE_MESSAGE_FAIL_INVALID_EMAIL]
+            ]
+        ];
     }
 }

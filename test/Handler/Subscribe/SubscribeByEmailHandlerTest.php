@@ -74,7 +74,7 @@ class SubscribeByEmailHandlerTest extends TestCase
         $this->flashMessage
             ->expects($this->once())
             ->method('flash')
-            ->with('status', self::RESPONSE_MESSAGE_FAIL_INVALID_EMAIL);
+            ->with('error', self::RESPONSE_MESSAGE_FAIL_INVALID_EMAIL);
 
         $this->userService
             ->expects($this->never())

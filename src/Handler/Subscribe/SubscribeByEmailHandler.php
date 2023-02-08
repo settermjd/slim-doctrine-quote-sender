@@ -37,7 +37,7 @@ class SubscribeByEmailHandler
 
             $flashMessage->flash('status', self::RESPONSE_MESSAGE_SUBSCRIBE_SUCCESS);
         } else {
-            $flashMessage->flash('status', self::RESPONSE_MESSAGE_FAIL_INVALID_EMAIL);
+            $flashMessage->flash('error', self::RESPONSE_MESSAGE_FAIL_INVALID_EMAIL);
         }
 
         return new RedirectResponse('/api/subscribe/by-email-address');
