@@ -21,7 +21,7 @@ class SubscribeByEmailHandlerTest extends TestCase
 {
     use EmailHandlerTrait;
 
-    private MockObject|FlashMessagesInterface $flashMessage;
+    private FlashMessagesInterface|MockObject $flashMessage;
     private ServerRequestInterface|MockObject $request;
     private UserService|MockObject $userService;
 
@@ -65,7 +65,7 @@ class SubscribeByEmailHandlerTest extends TestCase
         $result = $handler->handle($this->request, $response, []);
 
         $this->assertInstanceOf(RedirectResponse::class, $result);
-        $this->assertSame('/api/subscribe/by-email-address', $result->getHeaderLine('location'));
+        $this->assertSame('/subscribe/by-email-address', $result->getHeaderLine('location'));
     }
 
     public function testCanHandleInvalidFormSubmissions()
@@ -97,6 +97,6 @@ class SubscribeByEmailHandlerTest extends TestCase
         $result = $handler->handle($this->request, $response, []);
 
         $this->assertInstanceOf(RedirectResponse::class, $result);
-        $this->assertSame('/api/subscribe/by-email-address', $result->getHeaderLine('location'));
+        $this->assertSame('/subscribe/by-email-address', $result->getHeaderLine('location'));
     }
 }

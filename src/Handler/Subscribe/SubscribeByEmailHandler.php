@@ -40,6 +40,6 @@ class SubscribeByEmailHandler
             $flashMessage->flash('error', self::RESPONSE_MESSAGE_FAIL_INVALID_EMAIL);
         }
 
-        return new RedirectResponse('/api/subscribe/by-email-address');
+        return new RedirectResponse('/subscribe/by-email-address');
     }
 }

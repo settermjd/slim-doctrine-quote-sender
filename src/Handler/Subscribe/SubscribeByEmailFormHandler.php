@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace App\Handler\Subscribe;
 
-use Laminas\Diactoros\Response\HtmlResponse;
 use Mezzio\Flash\FlashMessageMiddleware;
 use Mezzio\Flash\FlashMessagesInterface;
-use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Slim\Views\Twig;
 
 class SubscribeByEmailFormHandler
 {
-    public function __construct(private TemplateRendererInterface $renderer)
-    {
-    }
+    public const TEMPLATE_NAME = 'app/subscribe-by-email.html.twig';
 
     public function handle(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
+        $view = Twig::fromRequest($request);
+
         $data = [];
 
         /** @var FlashMessagesInterface $flashMessage */
@@ -33,6 +32,6 @@ class SubscribeByEmailFormHandler
             }
         }
 
-        return new HtmlResponse($this->renderer->render('app::subscribe-by-email', $data));
+        return $view->render($response, self::TEMPLATE_NAME, $data);
     }
 }

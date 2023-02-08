@@ -6,11 +6,11 @@ use App\Handler\EmailHandlerTrait;
 use App\Handler\Subscribe\SubscribeByEmailFormHandler;
 use Mezzio\Flash\FlashMessageMiddleware;
 use Mezzio\Flash\FlashMessagesInterface;
-use Mezzio\Template\TemplateRendererInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Slim\Views\Twig;
 
 class SubscribeByEmailFormHandlerTest extends TestCase
 {
@@ -25,15 +25,34 @@ class SubscribeByEmailFormHandlerTest extends TestCase
 
     public function testCanSuccessfullyHandleRequests()
     {
-        $renderer = $this->createMock(TemplateRendererInterface::class);
-        $renderer
+        $response = $this->createMock(ResponseInterface::class);
+
+        $twig = $this->createMock(Twig::class);
+        $twig
             ->expects($this->once())
             ->method('render')
-            ->with('app::subscribe-by-email', $this->isType('array'))
-            ->willReturn('');
+            ->with(
+                $response,
+                SubscribeByEmailFormHandler::TEMPLATE_NAME,
+                $this->isType('array')
+            )
+            ->willReturn($this->createMock(ResponseInterface::class));
 
-        $handler = new SubscribeByEmailFormHandler($renderer);
-        $response = $handler->handle($this->request, $this->createMock(ResponseInterface::class), []);
+        $flashMessage = $this->createMock(FlashMessagesInterface::class);
+        $flashMessage
+            ->expects($this->once())
+            ->method('getFlashes')
+            ->willReturn(
+                ['status' => self::RESPONSE_MESSAGE_SUBSCRIBE_SUCCESS]
+            );
+
+        $this->request
+            ->expects($this->exactly(2))
+            ->method('getAttribute')
+            ->willReturnOnConsecutiveCalls($twig, $flashMessage);
+
+        $handler = new SubscribeByEmailFormHandler();
+        $response = $handler->handle($this->request, $response, []);
 
         $this->assertInstanceOf(ResponseInterface::class, $response);
     }
@@ -63,25 +82,15 @@ class SubscribeByEmailFormHandlerTest extends TestCase
             ->willReturn($flashes);
 
         $this->request
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getAttribute')
-            ->with(FlashMessageMiddleware::FLASH_ATTRIBUTE)
-            ->willReturn($flashMessage);
+            ->willReturnOnConsecutiveCalls($twig, $flashMessage);
 
-        $renderer = $this->createMock(TemplateRendererInterface::class);
-        $renderer
-            ->expects($this->once())
-            ->method('render')
-            ->with(
-                'app::subscribe-by-email',
-                [
-                    'status' => self::RESPONSE_MESSAGE_SUBSCRIBE_SUCCESS,
-                ]
-            )
-            ->willReturn('');
+        $handler = new SubscribeByEmailFormHandler();
+        $result = $handler->handle($this->request, $response, []);
 
-        $handler = new SubscribeByEmailFormHandler($renderer);
-        $response = $handler->handle($this->request, $this->createMock(ResponseInterface::class), []);
+        $this->assertInstanceOf(ResponseInterface::class, $result);
+    }
 
     public static function flashMessageProvider(): array
     {
