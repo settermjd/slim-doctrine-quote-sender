@@ -46,7 +46,7 @@ class UserServiceTest extends TestCase
     {
         parent::tearDown();
 
-        //$this->purger->purge();
+        $this->purger->purge();
         $this->entityManager->close();
         $this->entityManager = null;
     }
