@@ -10,12 +10,11 @@ use Doctrine\ORM\EntityManager;
 
 class UserService
 {
-
     public function __construct(private EntityManager $em)
     {
     }
 
-    public function create(string $fullName, string $emailAddress, string $mobileNumber = null): User
+    public function create(string $fullName = null, string $emailAddress = null, string $mobileNumber = null): User
     {
         $newUser = new User($fullName, $emailAddress, $mobileNumber);
 

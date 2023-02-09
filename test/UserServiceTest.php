@@ -54,8 +54,8 @@ class UserServiceTest extends TestCase
     /**
      * @dataProvider createUserDataProvider
      */
-    public function testUserServiceCanCreateNewUser(
-        string $fullName,
+    public function testUserServiceCanCreateNewUserWithAnyCombinationOfUserDetails(
+        string $fullName = null,
         string $emailAddress = null,
         string $mobileNumber = null
     ) {
@@ -78,6 +78,21 @@ class UserServiceTest extends TestCase
                 'User 4',
                 'user4@example.org',
                 '+14155552671'
+            ],
+            [
+                null,
+                'user5@example.org',
+                null
+            ],
+            [
+                null,
+                null,
+                '+14155552671'
+            ],
+            [
+                'User 4',
+                null,
+                null,
             ],
         ];
     }
