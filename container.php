@@ -87,9 +87,7 @@ $container->set(UnsubscribeByEmailHandler::class, static function (Container $c)
 });
 
 $container->set(UnsubscribeByEmailFormHandler::class, static function (Container $c): UnsubscribeByEmailFormHandler {
-    /** @var TemplateRendererInterface $templateRenderer */
-    $templateRenderer = $c->get(TemplateRendererInterface::class);
-    return new UnsubscribeByEmailFormHandler($templateRenderer);
+    return new UnsubscribeByEmailFormHandler();
 });
 
 $container->set(SubscribeByEmailFormHandler::class, static function (Container $c): SubscribeByEmailFormHandler {
