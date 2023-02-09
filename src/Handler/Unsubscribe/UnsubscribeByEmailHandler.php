@@ -40,7 +40,7 @@ class UnsubscribeByEmailHandler
             $flashMessage->flash('status', self::RESPONSE_MESSAGE_FAIL_INVALID_EMAIL);
         }
 
-        return new RedirectResponse('/api/unsubscribe/by-email-address');
+        return new RedirectResponse('/unsubscribe/by-email-address');
     }
 
 }
