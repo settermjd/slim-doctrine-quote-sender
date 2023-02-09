@@ -98,6 +98,7 @@ class UserService
                 ]
             );
         $this->em->remove($user);
+        $this->em->flush();
 
         return true;
     }
@@ -112,6 +113,7 @@ class UserService
                 ]
             );
         $this->em->remove($user);
+        $this->em->flush();
 
         return true;
     }
