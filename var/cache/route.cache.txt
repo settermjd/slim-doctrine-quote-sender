@@ -1,0 +1,21 @@
+<?php return array (
+  0 => 
+  array (
+    'GET' => 
+    array (
+      '/' => 'route0',
+      '/subscribe/by-email-address' => 'route2',
+      '/unsubscribe/by-email-address' => 'route5',
+    ),
+    'POST' => 
+    array (
+      '/subscribe/by-mobile-number' => 'route1',
+      '/subscribe/by-email-address' => 'route3',
+      '/unsubscribe/by-mobile-number' => 'route4',
+      '/unsubscribe/by-email-address' => 'route6',
+    ),
+  ),
+  1 => 
+  array (
+  ),
+);

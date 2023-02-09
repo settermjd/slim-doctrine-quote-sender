@@ -52,9 +52,9 @@ class SubscribeByEmailFormHandlerTest extends TestCase
             ->willReturnOnConsecutiveCalls($twig, $flashMessage);
 
         $handler = new SubscribeByEmailFormHandler();
-        $response = $handler->handle($this->request, $response, []);
+        $result = $handler->handle($this->request, $response, []);
 
-        $this->assertInstanceOf(ResponseInterface::class, $response);
+        $this->assertInstanceOf(ResponseInterface::class, $result);
     }
 
     /**

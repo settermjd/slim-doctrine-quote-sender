@@ -3,6 +3,8 @@ volumes:
     driver: local
   database_test_data:
     driver: local
+  cache_data:
+    driver: local
 
 services:
 
@@ -31,6 +33,7 @@ services:
       dockerfile: docker/php/Dockerfile
     volumes:
       - .:/var/www/html
+      - cache_data:/var/www/html/var/cache
 
   database:
     image: postgres:15.1-alpine3.17
