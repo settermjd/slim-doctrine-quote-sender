@@ -38,6 +38,7 @@
             "php -S 0.0.0.0:8080 -t public/"
         ],
         "test": "phpunit --colors=always",
-        "docker-test": "docker compose exec php composer test"
+        "docker-test": "docker compose exec php composer test",
+        "docker-doctrine": "docker compose exec php php vendor/bin/doctrine"
     }
 }
