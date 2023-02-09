@@ -13,7 +13,7 @@ class UnsubscribeByEmailFormHandler
 {
     use FlashMessageHandlerTrait;
 
-    const TEMPLATE_NAME = 'app/unsubscribe-by-email';
+    const TEMPLATE_NAME = 'app/unsubscribe-by-email.html.twig';
 
     public function handle(ServerRequestInterface $request, ResponseInterface $response, array $args)
     {
