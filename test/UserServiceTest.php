@@ -97,6 +97,46 @@ class UserServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @dataProvider createAndUpdateUserDataProvider
+     */
+    public function testWillCheckIfUserAlreadyExistsBeforeCreating(array $userData) {
+        $userService = new UserService($this->entityManager);
+
+        if (array_key_exists('mobileNumber', $userData)) {
+            $user = $userService->createWithMobileNumber($userData['mobileNumber']);
+            $this->assertInstanceOf(User::class, $user);
+            $this->assertTrue($this->entityManager->contains($user));
+        }
+
+        if (array_key_exists('emailAddress', $userData)) {
+            $user = $userService->createWithEmailAddress($userData['emailAddress']);
+            $this->assertInstanceOf(User::class, $user);
+            $this->assertTrue($this->entityManager->contains($user));
+        }
+    }
+
+    public static function createAndUpdateUserDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'emailAddress' => 'user1@example.org',
+                ]
+            ],
+            [
+                [
+                    'mobileNumber' => '+14155552672'
+                ]
+            ],
+            [
+                [
+                    'emailAddress' => 'user5@example.org',
+                ]
+            ],
+        ];
+    }
+
     public function testCanCreateNewUserWithMobileNumber()
     {
         $userService = new UserService($this->entityManager);

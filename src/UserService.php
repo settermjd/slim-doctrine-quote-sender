@@ -26,6 +26,11 @@ class UserService
 
     public function createWithMobileNumber(string $mobileNumber): User
     {
+        $user = $this->findByMobileNumber($mobileNumber);
+        if ($user instanceof User) {
+            return $user;
+        }
+
         $newUser = new User(null, null, $mobileNumber);
 
         $this->em->persist($newUser);
@@ -36,6 +41,11 @@ class UserService
 
     public function createWithEmailAddress(string $emailAddress): User
     {
+        $user = $this->findByEmailAddress($emailAddress);
+        if ($user instanceof User) {
+            return $user;
+        }
+
         $newUser = new User(null, $emailAddress, null);
 
         $this->em->persist($newUser);
