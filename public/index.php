@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Handler\Subscribe\SubscribeByEmailFormHandler;
 use App\Handler\Subscribe\SubscribeByEmailHandler;
 use App\Handler\Subscribe\SubscribeByMobileHandler;
+use App\Handler\TwilioWebhookRequestMiddleware;
 use App\Handler\Unsubscribe\UnsubscribeByEmailFormHandler;
 use App\Handler\Unsubscribe\UnsubscribeByEmailHandler;
 use App\Handler\Unsubscribe\UnsubscribeByMobileHandler;
@@ -35,6 +36,11 @@ $app->get('/', function (Request $request, Response $response, $args) {
     $response->getBody()->write("Hello world!");
     return $response;
 });
+
+/**
+ * Handle all webooks received from Twilio.
+ */
+$app->post('/webhook/twilio', [TwilioWebhookRequestMiddleware::class, 'handle']);
 
 $app->group('/subscribe', function (RouteCollectorProxy $group) use ($app) {
 

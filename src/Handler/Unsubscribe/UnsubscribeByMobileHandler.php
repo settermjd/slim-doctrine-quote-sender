@@ -11,6 +11,20 @@ use Twilio\TwiML\MessagingResponse;
 
 class UnsubscribeByMobileHandler
 {
+    /**
+     * The list of the keywords that a user can use to unsubscribe
+     *
+     * @var array<int,string>
+     */
+    public const KEYWORDS = [
+        'cancel',
+        'end',
+        'quit',
+        'stop',
+        'stopall',
+        'unsubscribe',
+    ];
+
     public const RESPONSE_MESSAGE_SUCCESSFULLY_UNSUBSCRIBED = <<<EOF
 You are now unsubscribed from the daily developer quotes service. 
 To resubscribe, send another SMS to this number with the text: SUBSCRIBE.

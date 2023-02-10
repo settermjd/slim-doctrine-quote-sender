@@ -15,6 +15,17 @@ use Twilio\TwiML\MessagingResponse;
  */
 class SubscribeByMobileHandler
 {
+    /**
+     * The list of the keywords that a user can use to subscribe
+     *
+     * @var array<int,string>
+     */
+    public const KEYWORDS = [
+        'subscribe',
+        'unstop',
+        'yes',
+    ];
+
     public const REGEX_MOBILE_NUMBER = '^\+[1-9]\d{1,14}$';
     public const RESPONSE_MESSAGE_SUCCESSFULLY_SUBSCRIBED = <<<EOF
 You are now subscribed to the daily developer quotes service. 
