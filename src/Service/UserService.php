@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManager;
 
 class UserService
 {
-    public function __construct(private EntityManager $em)
+    public function __construct(private readonly EntityManager $em)
     {
     }
 

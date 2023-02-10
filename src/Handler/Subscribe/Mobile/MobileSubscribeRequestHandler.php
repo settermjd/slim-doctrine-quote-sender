@@ -33,8 +33,10 @@ To unsubscribe, send another SMS to this number with the text: UNSUBSCRIBE
 EOF;
     public const RESPONSE_MESSAGE_INVALID_MOBILE_NUMBER = 'Mobile number must be in E.164 format. More information is available at https://www.twilio.com/docs/glossary/what-e164.';
 
-    public function __construct(private UserService $userService, private InputFilterInterface $inputFilter)
-    {
+    public function __construct(
+        private readonly UserService $userService,
+        private readonly InputFilterInterface $inputFilter
+    ) {
     }
 
     public function handle(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface

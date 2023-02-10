@@ -17,8 +17,10 @@ class EmailSubscribeRequestHandler
 {
     use EmailHandlerTrait;
 
-    public function __construct(private UserService $userService, private InputFilterInterface $inputFilter)
-    {
+    public function __construct(
+        private readonly UserService $userService,
+        private readonly InputFilterInterface $inputFilter
+    ) {
     }
 
     public function handle(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface

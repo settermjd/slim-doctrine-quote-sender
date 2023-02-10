@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManager;
 
 class QuoteService
 {
-    public function __construct(private EntityManager $em)
+    public function __construct(private readonly EntityManager $em)
     {
     }
 
