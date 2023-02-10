@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Handler\MobileUnknownRequestHandler;
 use App\Handler\Subscribe\SubscribeByEmailFormHandler;
 use App\Handler\Subscribe\SubscribeByEmailHandler;
 use App\Handler\Subscribe\SubscribeByMobileHandler;
@@ -42,11 +43,21 @@ $app->get('/', function (Request $request, Response $response, $args) {
  */
 $app->post('/webhook/twilio', [TwilioWebhookRequestMiddleware::class, 'handle']);
 
-$app->group('/subscribe', function (RouteCollectorProxy $group) use ($app) {
+$app->group('/mobile', function (RouteCollectorProxy $group) use ($app) {
+    $group->group('/request', function (RouteCollectorProxy $group) use ($app) {
+        $group
+            ->get('/subscribe', [SubscribeByMobileHandler::class, 'handle'])
+            ->setName('mobile.request.subscribe');
+        $group
+            ->get('/unsubscribe', [UnsubscribeByMobileHandler::class, 'handle'])
+            ->setName('mobile.request.unsubscribe');
+        $group
+            ->get('/unknown', [MobileUnknownRequestHandler::class, 'handle'])
+            ->setName('mobile.request.unknown');
+    });
+});
 
-    $group
-        ->post('/by-mobile-number', [SubscribeByMobileHandler::class, 'handle'])
-        ->setName('subscribe-by-mobile-number');
+$app->group('/subscribe', function (RouteCollectorProxy $group) use ($app) {
 
     // Render the form for users wanting to subscribe with their email address
     $group
@@ -64,9 +75,6 @@ $app->group('/subscribe', function (RouteCollectorProxy $group) use ($app) {
 
 $app->group('/unsubscribe', function (RouteCollectorProxy $group) use ($app)
 {
-    $group
-        ->post('/by-mobile-number', [UnsubscribeByMobileHandler::class, 'handle'])
-        ->setName('subscribe-by-mobile-number');
 
     // Render the form for users wanting to unsubscribe with their email address
     $group
