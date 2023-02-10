@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Handler\Subscribe;
+namespace App\Handler\Subscribe\Mobile;
 
 use App\UserService;
 use Laminas\Diactoros\Response\XmlResponse;
 use Laminas\InputFilter\InputFilterInterface;
-use Psr\Http\Message\{ResponseInterface,ServerRequestInterface};
+use Psr\Http\Message\{ResponseInterface, ServerRequestInterface};
 use Twilio\TwiML\MessagingResponse;
 
 /**
  * This class subscribes a user to the service using their mobile number
  */
-class SubscribeByMobileHandler
+class MobileSubscribeRequestHandler
 {
     /**
      * The list of the keywords that a user can use to subscribe

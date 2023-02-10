@@ -1,19 +1,18 @@
 <?php
 
-namespace AppTest\Handler\Subscribe;
+namespace AppTest\Handler\Subscribe\Mobile;
 
 use App\Domain\User;
-use App\Handler\Subscribe\SubscribeByMobileHandler;
+use App\Handler\Subscribe\Mobile\MobileSubscribeRequestHandler;
 use App\InputFilter\MobileNumberInputFilter;
 use App\UserService;
 use Laminas\Diactoros\Response\XmlResponse;
-use Laminas\InputFilter\InputFilterInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class SubscribeByMobileHandlerTest extends TestCase
+class MobileSubscribeRequestHandlerTest extends TestCase
 {
     private MockObject|ServerRequestInterface $request;
     private MockObject|UserService $userService;
@@ -35,7 +34,7 @@ class SubscribeByMobileHandlerTest extends TestCase
             ->with($mobileNumber)
             ->willReturn($user);
 
-        $handler = new SubscribeByMobileHandler($this->userService, new MobileNumberInputFilter());
+        $handler = new MobileSubscribeRequestHandler($this->userService, new MobileNumberInputFilter());
         $this->request
             ->expects($this->once())
             ->method('getParsedBody')
@@ -71,7 +70,7 @@ EOF;
             ->with($mobileNumber)
             ->willReturn($user);
 
-        $handler = new SubscribeByMobileHandler($this->userService, new MobileNumberInputFilter());
+        $handler = new MobileSubscribeRequestHandler($this->userService, new MobileNumberInputFilter());
         $this->request
             ->expects($this->once())
             ->method('getParsedBody')

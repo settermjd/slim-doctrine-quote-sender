@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 use App\Handler\MobileUnknownRequestHandler;
+use App\Handler\Subscribe\Mobile\MobileSubscribeRequestHandler;
 use App\Handler\Subscribe\SubscribeByEmailFormHandler;
 use App\Handler\Subscribe\SubscribeByEmailHandler;
-use App\Handler\Subscribe\SubscribeByMobileHandler;
 use App\Handler\TwilioWebhookRequestMiddleware;
+use App\Handler\Unsubscribe\Mobile\MobileUnsubscribeRequestHandler;
 use App\Handler\Unsubscribe\UnsubscribeByEmailFormHandler;
 use App\Handler\Unsubscribe\UnsubscribeByEmailHandler;
-use App\Handler\Unsubscribe\UnsubscribeByMobileHandler;
 use DI\Container;
 use Mezzio\Flash\FlashMessageMiddleware;
 use Mezzio\Helper\ContentLengthMiddleware;
@@ -46,10 +46,10 @@ $app->post('/webhook/twilio', [TwilioWebhookRequestMiddleware::class, 'handle'])
 $app->group('/mobile', function (RouteCollectorProxy $group) use ($app) {
     $group->group('/request', function (RouteCollectorProxy $group) use ($app) {
         $group
-            ->get('/subscribe', [SubscribeByMobileHandler::class, 'handle'])
+            ->get('/subscribe', [MobileSubscribeRequestHandler::class, 'handle'])
             ->setName('mobile.request.subscribe');
         $group
-            ->get('/unsubscribe', [UnsubscribeByMobileHandler::class, 'handle'])
+            ->get('/unsubscribe', [MobileUnsubscribeRequestHandler::class, 'handle'])
             ->setName('mobile.request.unsubscribe');
         $group
             ->get('/unknown', [MobileUnknownRequestHandler::class, 'handle'])

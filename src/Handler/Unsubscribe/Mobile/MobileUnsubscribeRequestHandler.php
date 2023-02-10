@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Handler\Unsubscribe;
+namespace App\Handler\Unsubscribe\Mobile;
 
 use App\UserService;
 use Laminas\Diactoros\Response\XmlResponse;
@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Twilio\TwiML\MessagingResponse;
 
-class UnsubscribeByMobileHandler
+class MobileUnsubscribeRequestHandler
 {
     /**
      * The list of the keywords that a user can use to unsubscribe

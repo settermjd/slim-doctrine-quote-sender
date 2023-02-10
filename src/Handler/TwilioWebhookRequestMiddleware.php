@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Handler;
 
-use App\Handler\Subscribe\SubscribeByMobileHandler;
-use App\Handler\Unsubscribe\UnsubscribeByMobileHandler;
+use App\Handler\Subscribe\Mobile\MobileSubscribeRequestHandler;
+use App\Handler\Unsubscribe\Mobile\MobileUnsubscribeRequestHandler;
 use Laminas\Diactoros\Response\RedirectResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -46,11 +46,11 @@ class TwilioWebhookRequestMiddleware
     {
         $keyword = strtolower($keyword);
 
-        if (in_array($keyword, UnsubscribeByMobileHandler::KEYWORDS)) {
+        if (in_array($keyword, MobileUnsubscribeRequestHandler::KEYWORDS)) {
             return self::REDIRECT_TYPE_UNSUBSCRIBE;
         }
 
-        if (in_array($keyword, SubscribeByMobileHandler::KEYWORDS)) {
+        if (in_array($keyword, MobileSubscribeRequestHandler::KEYWORDS)) {
             return self::REDIRECT_TYPE_SUBSCRIBE;
         }
 

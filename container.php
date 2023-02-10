@@ -1,11 +1,11 @@
 <?php
 
+use App\Handler\Subscribe\Mobile\MobileSubscribeRequestHandler;
 use App\Handler\Subscribe\SubscribeByEmailFormHandler;
 use App\Handler\Subscribe\SubscribeByEmailHandler;
-use App\Handler\Subscribe\SubscribeByMobileHandler;
+use App\Handler\Unsubscribe\Mobile\MobileUnsubscribeRequestHandler;
 use App\Handler\Unsubscribe\UnsubscribeByEmailFormHandler;
 use App\Handler\Unsubscribe\UnsubscribeByEmailHandler;
-use App\Handler\Unsubscribe\UnsubscribeByMobileHandler;
 use App\InputFilter\EmailInputFilter;
 use App\InputFilter\MobileNumberInputFilter;
 use App\QuoteService;
@@ -19,7 +19,6 @@ use Mezzio\Session\Ext\PhpSessionPersistenceFactory;
 use Mezzio\Session\SessionMiddleware;
 use Mezzio\Session\SessionMiddlewareFactory;
 use Mezzio\Session\SessionPersistenceInterface;
-use Mezzio\Template\TemplateRendererInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
@@ -74,10 +73,10 @@ $container->set(QuoteService::class, static function(Container $c): QuoteService
     return new QuoteService($em);
 });
 
-$container->set(UnsubscribeByMobileHandler::class, static function (Container $c): UnsubscribeByMobileHandler {
+$container->set(MobileUnsubscribeRequestHandler::class, static function (Container $c): MobileUnsubscribeRequestHandler {
     /** @var UserService $userService */
     $userService = $c->get(UserService::class);
-    return new UnsubscribeByMobileHandler($userService, new MobileNumberInputFilter());
+    return new MobileUnsubscribeRequestHandler($userService, new MobileNumberInputFilter());
 });
 
 $container->set(UnsubscribeByEmailHandler::class, static function (Container $c): UnsubscribeByEmailHandler {
@@ -94,10 +93,10 @@ $container->set(SubscribeByEmailFormHandler::class, static function (Container $
     return new SubscribeByEmailFormHandler();
 });
 
-$container->set(SubscribeByMobileHandler::class, static function (Container $c): SubscribeByMobileHandler {
+$container->set(MobileSubscribeRequestHandler::class, static function (Container $c): MobileSubscribeRequestHandler {
     /** @var UserService $userService */
     $userService = $c->get(UserService::class);
-    return new SubscribeByMobileHandler($userService, new MobileNumberInputFilter());
+    return new MobileSubscribeRequestHandler($userService, new MobileNumberInputFilter());
 });
 
 $container->set(SubscribeByEmailHandler::class, static function (Container $c): SubscribeByEmailHandler {

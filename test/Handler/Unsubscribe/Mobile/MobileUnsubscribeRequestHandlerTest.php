@@ -1,8 +1,8 @@
 <?php
 
-namespace AppTest\Handler\Unsubscribe;
+namespace AppTest\Handler\Unsubscribe\Mobile;
 
-use App\Handler\Unsubscribe\UnsubscribeByMobileHandler;
+use App\Handler\Unsubscribe\Mobile\MobileUnsubscribeRequestHandler;
 use App\InputFilter\MobileNumberInputFilter;
 use App\UserService;
 use Laminas\Diactoros\Response\XmlResponse;
@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class UnsubscribeByMobileHandlerTest extends TestCase
+class MobileUnsubscribeRequestHandlerTest extends TestCase
 {
     private MockObject|ServerRequestInterface $request;
     private MockObject|UserService $userService;
@@ -39,7 +39,7 @@ class UnsubscribeByMobileHandlerTest extends TestCase
             ]);
         $response = $this->createMock(ResponseInterface::class);
 
-        $handler = new UnsubscribeByMobileHandler($this->userService, new MobileNumberInputFilter());
+        $handler = new MobileUnsubscribeRequestHandler($this->userService, new MobileNumberInputFilter());
         $result = $handler->handle($this->request, $response, []);
 
         $this->assertInstanceOf(XmlResponse::class, $result);
@@ -68,7 +68,7 @@ EOF;
             ]);
         $response = $this->createMock(ResponseInterface::class);
 
-        $handler = new UnsubscribeByMobileHandler($this->userService, new MobileNumberInputFilter());
+        $handler = new MobileUnsubscribeRequestHandler($this->userService, new MobileNumberInputFilter());
         $result = $handler->handle($this->request, $response, []);
 
         $this->assertInstanceOf(XmlResponse::class, $result);
