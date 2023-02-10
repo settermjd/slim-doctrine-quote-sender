@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace AppTest;
+namespace AppTest\Service;
 
 use App\Domain\Quote;
 use App\Domain\User;
-use App\QuoteService;
 use App\QuoteType;
-use App\UserService;
+use App\Service\QuoteService;
+use App\Service\UserService;
 use AppTest\Data\Fixtures\QuoteAuthorDataLoader;
 use AppTest\Data\Fixtures\QuoteDataLoader;
 use AppTest\Data\Fixtures\UserDataLoader;
@@ -27,7 +27,7 @@ class QuoteServiceTest extends TestCase
     public function setUp(): void
     {
         /** @var \Psr\Container\ContainerInterface $container */
-        $container = require_once __DIR__ . '/../container.php';
+        $container = require_once __DIR__ . '/../../container.php';
 
         $loader = new Loader();
         $loader->addFixture(new UserDataLoader());

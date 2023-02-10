@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Handler\Subscribe\Mobile;
 
-use App\UserService;
+use App\Service\UserService;
 use Laminas\Diactoros\Response\XmlResponse;
 use Laminas\InputFilter\InputFilterInterface;
 use Psr\Http\Message\{ResponseInterface, ServerRequestInterface};

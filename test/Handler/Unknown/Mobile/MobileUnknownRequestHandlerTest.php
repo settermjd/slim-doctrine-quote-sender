@@ -1,9 +1,8 @@
 <?php
 
-namespace AppTest\Handler;
+namespace AppTest\Handler\Unknown\Mobile;
 
-use App\Handler\MobileUnknownRequestHandler;
-use Laminas\Diactoros\Response\JsonResponse;
+use App\Handler\Unknown\Mobile\MobileUnknownRequestHandler;
 use Laminas\Diactoros\Response\XmlResponse;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;

@@ -5,7 +5,7 @@ namespace AppTest\Handler\Subscribe\Mobile;
 use App\Domain\User;
 use App\Handler\Subscribe\Mobile\MobileSubscribeRequestHandler;
 use App\InputFilter\MobileNumberInputFilter;
-use App\UserService;
+use App\Service\UserService;
 use Laminas\Diactoros\Response\XmlResponse;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Handler\Unsubscribe;
+namespace App\Handler\Unsubscribe\Email;
 
 use App\Handler\FlashMessageHandlerTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Views\Twig;
 
-class UnsubscribeByEmailFormHandler
+class EmailUnsubscribeRequestFormHandler
 {
     use FlashMessageHandlerTrait;
 

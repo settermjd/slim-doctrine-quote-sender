@@ -1,11 +1,11 @@
 <?php
 
-namespace AppTest\Handler\Unsubscribe;
+namespace AppTest\Handler\Unsubscribe\Email;
 
 use App\Handler\EmailHandlerTrait;
-use App\Handler\Unsubscribe\UnsubscribeByEmailHandler;
+use App\Handler\Unsubscribe\Email\EmailUnsubscribeRequestHandler;
 use App\InputFilter\EmailInputFilter;
-use App\UserService;
+use App\Service\UserService;
 use Laminas\Diactoros\Response\RedirectResponse;
 use Mezzio\Flash\FlashMessageMiddleware;
 use Mezzio\Flash\FlashMessagesInterface;
@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class UnsubscribeByEmailHandlerTest extends TestCase
+class EmailUnsubscribeRequestHandlerTest extends TestCase
 {
     use EmailHandlerTrait;
 
@@ -58,7 +58,7 @@ class UnsubscribeByEmailHandlerTest extends TestCase
 
         $response = $this->createMock(ResponseInterface::class);
 
-        $handler = new UnsubscribeByEmailHandler($this->userService, new EmailInputFilter());
+        $handler = new EmailUnsubscribeRequestHandler($this->userService, new EmailInputFilter());
         $result = $handler->handle($this->request, $response, []);
 
         $this->assertInstanceOf(RedirectResponse::class, $result);
@@ -92,7 +92,7 @@ class UnsubscribeByEmailHandlerTest extends TestCase
 
         $response = $this->createMock(ResponseInterface::class);
 
-        $handler = new UnsubscribeByEmailHandler($this->userService, new EmailInputFilter());
+        $handler = new EmailUnsubscribeRequestHandler($this->userService, new EmailInputFilter());
         $result = $handler->handle($this->request, $response, []);
 
         $this->assertInstanceOf(RedirectResponse::class, $result);

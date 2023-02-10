@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace AppTest\Handler\Subscribe;
+namespace AppTest\Handler\Subscribe\Email;
 
 use App\Domain\User;
 use App\Handler\EmailHandlerTrait;
-use App\Handler\Subscribe\SubscribeByEmailHandler;
+use App\Handler\Subscribe\Email\EmailSubscribeRequestHandler;
 use App\InputFilter\EmailInputFilter;
-use App\UserService;
+use App\Service\UserService;
 use Laminas\Diactoros\Response\RedirectResponse;
 use Mezzio\Flash\FlashMessageMiddleware;
 use Mezzio\Flash\FlashMessagesInterface;
@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class SubscribeByEmailHandlerTest extends TestCase
+class EmailSubscribeRequestHandlerTest extends TestCase
 {
     use EmailHandlerTrait;
 
@@ -60,7 +60,7 @@ class SubscribeByEmailHandlerTest extends TestCase
             ->with(FlashMessageMiddleware::FLASH_ATTRIBUTE)
             ->willReturn($this->flashMessage);
 
-        $handler = new SubscribeByEmailHandler($this->userService, new EmailInputFilter());
+        $handler = new EmailSubscribeRequestHandler($this->userService, new EmailInputFilter());
         $response = $this->createMock(ResponseInterface::class);
         $result = $handler->handle($this->request, $response, []);
 
@@ -92,7 +92,7 @@ class SubscribeByEmailHandlerTest extends TestCase
             ->with(FlashMessageMiddleware::FLASH_ATTRIBUTE)
             ->willReturn($this->flashMessage);
 
-        $handler = new SubscribeByEmailHandler($this->userService, new EmailInputFilter());
+        $handler = new EmailSubscribeRequestHandler($this->userService, new EmailInputFilter());
         $response = $this->createMock(ResponseInterface::class);
         $result = $handler->handle($this->request, $response, []);
 

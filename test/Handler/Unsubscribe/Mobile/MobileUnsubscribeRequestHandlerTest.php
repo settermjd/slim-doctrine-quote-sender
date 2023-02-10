@@ -4,7 +4,7 @@ namespace AppTest\Handler\Unsubscribe\Mobile;
 
 use App\Handler\Unsubscribe\Mobile\MobileUnsubscribeRequestHandler;
 use App\InputFilter\MobileNumberInputFilter;
-use App\UserService;
+use App\Service\UserService;
 use Laminas\Diactoros\Response\XmlResponse;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

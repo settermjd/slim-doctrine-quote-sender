@@ -1,8 +1,8 @@
 <?php
 
-namespace AppTest\Handler;
+namespace AppTest\Handler\Webhook\Twilio;
 
-use App\Handler\TwilioWebhookRequestMiddleware;
+use App\Handler\Webhook\Twilio\TwilioWebhookRequestMiddleware;
 use Laminas\Diactoros\Response\EmptyResponse;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;

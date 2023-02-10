@@ -1,9 +1,9 @@
 <?php
 
-namespace AppTest\Handler\Unsubscribe;
+namespace AppTest\Handler\Unsubscribe\Email;
 
 use App\Handler\EmailHandlerTrait;
-use App\Handler\Unsubscribe\UnsubscribeByEmailFormHandler;
+use App\Handler\Unsubscribe\Email\EmailUnsubscribeRequestFormHandler;
 use Mezzio\Flash\FlashMessagesInterface;
 use Mezzio\Template\TemplateRendererInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -12,7 +12,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Views\Twig;
 
-class UnsubscribeByEmailFormHandlerTest extends TestCase
+class EmailUnsubscribeRequestFormHandlerTest extends TestCase
 {
     use EmailHandlerTrait;
 
@@ -35,7 +35,7 @@ class UnsubscribeByEmailFormHandlerTest extends TestCase
             ->method('render')
             ->with(
                 $response,
-                UnsubscribeByEmailFormHandler::TEMPLATE_NAME,
+                EmailUnsubscribeRequestFormHandler::TEMPLATE_NAME,
                 $this->isType('array')
             )
             ->willReturn($this->createMock(ResponseInterface::class));
@@ -53,7 +53,7 @@ class UnsubscribeByEmailFormHandlerTest extends TestCase
             ->method('getAttribute')
             ->willReturnOnConsecutiveCalls($twig, $flashMessage);
 
-        $handler = new UnsubscribeByEmailFormHandler();
+        $handler = new EmailUnsubscribeRequestFormHandler();
         $response = $handler->handle($this->request, $response, []);
 
         $this->assertInstanceOf(ResponseInterface::class, $response);
@@ -72,7 +72,7 @@ class UnsubscribeByEmailFormHandlerTest extends TestCase
             ->method('render')
             ->with(
                 $response,
-                UnsubscribeByEmailFormHandler::TEMPLATE_NAME,
+                EmailUnsubscribeRequestFormHandler::TEMPLATE_NAME,
                 $flashes
             )
             ->willReturn($this->createMock(ResponseInterface::class));
@@ -88,7 +88,7 @@ class UnsubscribeByEmailFormHandlerTest extends TestCase
             ->method('getAttribute')
             ->willReturnOnConsecutiveCalls($twig, $flashMessage);
 
-        $handler = new UnsubscribeByEmailFormHandler();
+        $handler = new EmailUnsubscribeRequestFormHandler();
         $result = $handler->handle($this->request, $this->createMock(ResponseInterface::class), []);
 
         $this->assertInstanceOf(ResponseInterface::class, $result);

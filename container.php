@@ -1,15 +1,15 @@
 <?php
 
+use App\Handler\Subscribe\Email\EmailSubscribeRequestFormHandler;
+use App\Handler\Subscribe\Email\EmailSubscribeRequestHandler;
 use App\Handler\Subscribe\Mobile\MobileSubscribeRequestHandler;
-use App\Handler\Subscribe\SubscribeByEmailFormHandler;
-use App\Handler\Subscribe\SubscribeByEmailHandler;
+use App\Handler\Unsubscribe\Email\EmailUnsubscribeRequestFormHandler;
+use App\Handler\Unsubscribe\Email\EmailUnsubscribeRequestHandler;
 use App\Handler\Unsubscribe\Mobile\MobileUnsubscribeRequestHandler;
-use App\Handler\Unsubscribe\UnsubscribeByEmailFormHandler;
-use App\Handler\Unsubscribe\UnsubscribeByEmailHandler;
 use App\InputFilter\EmailInputFilter;
 use App\InputFilter\MobileNumberInputFilter;
-use App\QuoteService;
-use App\UserService;
+use App\Service\QuoteService;
+use App\Service\UserService;
 use DI\Container;
 use Doctrine\Common\Cache\Psr6\DoctrineProvider;
 use Doctrine\DBAL\Types\Type;
@@ -79,18 +79,18 @@ $container->set(MobileUnsubscribeRequestHandler::class, static function (Contain
     return new MobileUnsubscribeRequestHandler($userService, new MobileNumberInputFilter());
 });
 
-$container->set(UnsubscribeByEmailHandler::class, static function (Container $c): UnsubscribeByEmailHandler {
+$container->set(EmailUnsubscribeRequestHandler::class, static function (Container $c): EmailUnsubscribeRequestHandler {
     /** @var UserService $userService */
     $userService = $c->get(UserService::class);
-    return new UnsubscribeByEmailHandler($userService, new EmailInputFilter());
+    return new EmailUnsubscribeRequestHandler($userService, new EmailInputFilter());
 });
 
-$container->set(UnsubscribeByEmailFormHandler::class, static function (Container $c): UnsubscribeByEmailFormHandler {
-    return new UnsubscribeByEmailFormHandler();
+$container->set(EmailUnsubscribeRequestFormHandler::class, static function (Container $c): EmailUnsubscribeRequestFormHandler {
+    return new EmailUnsubscribeRequestFormHandler();
 });
 
-$container->set(SubscribeByEmailFormHandler::class, static function (Container $c): SubscribeByEmailFormHandler {
-    return new SubscribeByEmailFormHandler();
+$container->set(EmailSubscribeRequestFormHandler::class, static function (Container $c): EmailSubscribeRequestFormHandler {
+    return new EmailSubscribeRequestFormHandler();
 });
 
 $container->set(MobileSubscribeRequestHandler::class, static function (Container $c): MobileSubscribeRequestHandler {
@@ -99,10 +99,10 @@ $container->set(MobileSubscribeRequestHandler::class, static function (Container
     return new MobileSubscribeRequestHandler($userService, new MobileNumberInputFilter());
 });
 
-$container->set(SubscribeByEmailHandler::class, static function (Container $c): SubscribeByEmailHandler {
+$container->set(EmailSubscribeRequestHandler::class, static function (Container $c): EmailSubscribeRequestHandler {
     /** @var UserService $userService */
     $userService = $c->get(UserService::class);
-    return new SubscribeByEmailHandler($userService, new EmailInputFilter());
+    return new EmailSubscribeRequestHandler($userService, new EmailInputFilter());
 });
 
 return $container;

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-use App\Handler\MobileUnknownRequestHandler;
+use App\Handler\Subscribe\Email\EmailSubscribeRequestFormHandler;
+use App\Handler\Subscribe\Email\EmailSubscribeRequestHandler;
 use App\Handler\Subscribe\Mobile\MobileSubscribeRequestHandler;
-use App\Handler\Subscribe\SubscribeByEmailFormHandler;
-use App\Handler\Subscribe\SubscribeByEmailHandler;
-use App\Handler\TwilioWebhookRequestMiddleware;
+use App\Handler\Unknown\Mobile\MobileUnknownRequestHandler;
+use App\Handler\Unsubscribe\Email\EmailUnsubscribeRequestFormHandler;
+use App\Handler\Unsubscribe\Email\EmailUnsubscribeRequestHandler;
 use App\Handler\Unsubscribe\Mobile\MobileUnsubscribeRequestHandler;
-use App\Handler\Unsubscribe\UnsubscribeByEmailFormHandler;
-use App\Handler\Unsubscribe\UnsubscribeByEmailHandler;
+use App\Handler\Webhook\Twilio\TwilioWebhookRequestMiddleware;
 use DI\Container;
 use Mezzio\Flash\FlashMessageMiddleware;
 use Mezzio\Helper\ContentLengthMiddleware;
@@ -61,12 +61,12 @@ $app->group('/subscribe', function (RouteCollectorProxy $group) use ($app) {
 
     // Render the form for users wanting to subscribe with their email address
     $group
-        ->get('/by-email-address', [SubscribeByEmailFormHandler::class, 'handle'])
+        ->get('/by-email-address', [EmailSubscribeRequestFormHandler::class, 'handle'])
         ->setName('subscribe-by-email-address-form');
 
     // Handle requests to sign up by email address
     $group
-        ->post('/by-email-address', [SubscribeByEmailHandler::class, 'handle'])
+        ->post('/by-email-address', [EmailSubscribeRequestHandler::class, 'handle'])
         ->setName('subscribe-by-email-address');
 
 })
@@ -78,12 +78,12 @@ $app->group('/unsubscribe', function (RouteCollectorProxy $group) use ($app)
 
     // Render the form for users wanting to unsubscribe with their email address
     $group
-        ->get('/by-email-address', [UnsubscribeByEmailFormHandler::class, 'handle'])
+        ->get('/by-email-address', [EmailUnsubscribeRequestFormHandler::class, 'handle'])
         ->setName('subscribe-by-email-address-form');
 
     // Handle requests to unsubscribe by email address
     $group
-        ->post('/by-email-address', [UnsubscribeByEmailHandler::class, 'handle'])
+        ->post('/by-email-address', [EmailUnsubscribeRequestHandler::class, 'handle'])
         ->setName('subscribe-by-email-address');
 
 })

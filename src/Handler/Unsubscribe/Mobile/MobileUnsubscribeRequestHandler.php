@@ -2,7 +2,7 @@
 
 namespace App\Handler\Unsubscribe\Mobile;
 
-use App\UserService;
+use App\Service\UserService;
 use Laminas\Diactoros\Response\XmlResponse;
 use Laminas\InputFilter\InputFilterInterface;
 use Psr\Http\Message\ResponseInterface;

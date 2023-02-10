@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Service;
 
 use App\Domain\Quote;
 use App\Domain\User;
+use App\QuoteType;
 use Doctrine\ORM\EntityManager;
 
 class UserService

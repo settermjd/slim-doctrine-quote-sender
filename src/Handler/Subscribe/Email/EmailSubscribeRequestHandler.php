@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Handler\Subscribe;
+namespace App\Handler\Subscribe\Email;
 
 use App\Handler\EmailHandlerTrait;
-use App\UserService;
+use App\Service\UserService;
 use Laminas\Diactoros\Response\RedirectResponse;
 use Laminas\InputFilter\InputFilterInterface;
 use Mezzio\Flash\FlashMessageMiddleware;
@@ -13,7 +13,7 @@ use Mezzio\Flash\FlashMessagesInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class SubscribeByEmailHandler
+class EmailSubscribeRequestHandler
 {
     use EmailHandlerTrait;
 

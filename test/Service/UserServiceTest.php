@@ -1,11 +1,10 @@
 <?php
 
-namespace AppTest;
+namespace AppTest\Service;
 
-use App\Domain\Quote;
 use App\Domain\User;
 use App\QuoteType;
-use App\UserService;
+use App\Service\UserService;
 use AppTest\Data\Fixtures\QuoteAuthorDataLoader;
 use AppTest\Data\Fixtures\QuoteDataLoader;
 use AppTest\Data\Fixtures\UserDataLoader;
@@ -24,7 +23,7 @@ class UserServiceTest extends TestCase
     public function setUp(): void
     {
         /** @var \Psr\Container\ContainerInterface $container */
-        $container = require_once __DIR__ . '/../container.php';
+        $container = require_once __DIR__ . '/../../container.php';
 
         $loader = new Loader();
         $loader->addFixture(new UserDataLoader());

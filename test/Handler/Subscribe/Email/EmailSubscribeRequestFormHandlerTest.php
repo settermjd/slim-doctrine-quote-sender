@@ -1,10 +1,9 @@
 <?php
 
-namespace AppTest\Handler\Subscribe;
+namespace AppTest\Handler\Subscribe\Email;
 
 use App\Handler\EmailHandlerTrait;
-use App\Handler\Subscribe\SubscribeByEmailFormHandler;
-use Mezzio\Flash\FlashMessageMiddleware;
+use App\Handler\Subscribe\Email\EmailSubscribeRequestFormHandler;
 use Mezzio\Flash\FlashMessagesInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -12,7 +11,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Views\Twig;
 
-class SubscribeByEmailFormHandlerTest extends TestCase
+class EmailSubscribeRequestFormHandlerTest extends TestCase
 {
     use EmailHandlerTrait;
 
@@ -33,7 +32,7 @@ class SubscribeByEmailFormHandlerTest extends TestCase
             ->method('render')
             ->with(
                 $response,
-                SubscribeByEmailFormHandler::TEMPLATE_NAME,
+                EmailSubscribeRequestFormHandler::TEMPLATE_NAME,
                 $this->isType('array')
             )
             ->willReturn($this->createMock(ResponseInterface::class));
@@ -51,7 +50,7 @@ class SubscribeByEmailFormHandlerTest extends TestCase
             ->method('getAttribute')
             ->willReturnOnConsecutiveCalls($twig, $flashMessage);
 
-        $handler = new SubscribeByEmailFormHandler();
+        $handler = new EmailSubscribeRequestFormHandler();
         $result = $handler->handle($this->request, $response, []);
 
         $this->assertInstanceOf(ResponseInterface::class, $result);
@@ -70,7 +69,7 @@ class SubscribeByEmailFormHandlerTest extends TestCase
             ->method('render')
             ->with(
                 $response,
-                SubscribeByEmailFormHandler::TEMPLATE_NAME,
+                EmailSubscribeRequestFormHandler::TEMPLATE_NAME,
                 $flashes
             )
             ->willReturn($this->createMock(ResponseInterface::class));
@@ -86,7 +85,7 @@ class SubscribeByEmailFormHandlerTest extends TestCase
             ->method('getAttribute')
             ->willReturnOnConsecutiveCalls($twig, $flashMessage);
 
-        $handler = new SubscribeByEmailFormHandler();
+        $handler = new EmailSubscribeRequestFormHandler();
         $result = $handler->handle($this->request, $response, []);
 
         $this->assertInstanceOf(ResponseInterface::class, $result);

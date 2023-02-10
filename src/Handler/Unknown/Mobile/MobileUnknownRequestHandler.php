@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Handler;
+namespace App\Handler\Unknown\Mobile;
 
-use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Diactoros\Response\XmlResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

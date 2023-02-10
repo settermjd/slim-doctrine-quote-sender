@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Handler\Subscribe;
+namespace App\Handler\Subscribe\Email;
 
 use App\Handler\FlashMessageHandlerTrait;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Views\Twig;
 
-class SubscribeByEmailFormHandler
+class EmailSubscribeRequestFormHandler
 {
     use FlashMessageHandlerTrait;
 
