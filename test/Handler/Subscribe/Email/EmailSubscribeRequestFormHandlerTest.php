@@ -95,10 +95,16 @@ class EmailSubscribeRequestFormHandlerTest extends TestCase
     {
         return [
             [
-                ['status' => self::RESPONSE_MESSAGE_SUBSCRIBE_SUCCESS]
+                [
+                    'status' => self::RESPONSE_MESSAGE_SUBSCRIBE_SUCCESS,
+                    'action_route' => self::ROUTE_SUBSCRIBE,
+                ]
             ],
             [
-                ['error' => self::RESPONSE_MESSAGE_FAIL_INVALID_EMAIL]
+                [
+                    'error' => self::RESPONSE_MESSAGE_FAIL_INVALID_EMAIL,
+                    'action_route' => self::ROUTE_SUBSCRIBE,
+                ]
             ]
         ];
     }

@@ -65,7 +65,7 @@ class EmailSubscribeRequestHandlerTest extends TestCase
         $result = $handler->handle($this->request, $response, []);
 
         $this->assertInstanceOf(RedirectResponse::class, $result);
-        $this->assertSame('/subscribe/by-email-address', $result->getHeaderLine('location'));
+        $this->assertSame(self::ROUTE_SUBSCRIBE, $result->getHeaderLine('location'));
     }
 
     public function testCanHandleInvalidFormSubmissions()
@@ -97,6 +97,6 @@ class EmailSubscribeRequestHandlerTest extends TestCase
         $result = $handler->handle($this->request, $response, []);
 
         $this->assertInstanceOf(RedirectResponse::class, $result);
-        $this->assertSame('/subscribe/by-email-address', $result->getHeaderLine('location'));
+        $this->assertSame(self::ROUTE_SUBSCRIBE, $result->getHeaderLine('location'));
     }
 }

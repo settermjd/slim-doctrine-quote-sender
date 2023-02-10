@@ -62,7 +62,7 @@ class EmailUnsubscribeRequestHandlerTest extends TestCase
         $result = $handler->handle($this->request, $response, []);
 
         $this->assertInstanceOf(RedirectResponse::class, $result);
-        $this->assertSame('/unsubscribe/by-email-address', $result->getHeaderLine('location'));
+        $this->assertSame(self::ROUTE_UNSUBSCRIBE, $result->getHeaderLine('location'));
     }
 
     public function testCanHandleInvalidFormSubmissions()
@@ -96,6 +96,6 @@ class EmailUnsubscribeRequestHandlerTest extends TestCase
         $result = $handler->handle($this->request, $response, []);
 
         $this->assertInstanceOf(RedirectResponse::class, $result);
-        $this->assertSame('/unsubscribe/by-email-address', $result->getHeaderLine('location'));
+        $this->assertSame(self::ROUTE_UNSUBSCRIBE, $result->getHeaderLine('location'));
     }
 }

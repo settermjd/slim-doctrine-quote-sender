@@ -42,7 +42,7 @@
                 </div>
             {% endif %}
             <hr class="lg:hidden block w-full mt-1 md:mt-0 mb-3">
-            <form action="/unsubscribe/by-email-address" method="post">
+            <form action="{{ action_route }}" method="post">
                 <label>
                     <span class="text-slate-800 font-bold">Email address:</span>
                     <input type="email" name="email" class="border-2 rounded-md border-slate-200 p-2 my-2 w-full">

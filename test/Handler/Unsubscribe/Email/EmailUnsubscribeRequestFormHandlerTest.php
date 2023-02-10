@@ -98,10 +98,16 @@ class EmailUnsubscribeRequestFormHandlerTest extends TestCase
     {
         return [
             [
-                ['status' => self::RESPONSE_MESSAGE_UNSUBSCRIBE_SUCCESS]
+                [
+                    'status' => self::RESPONSE_MESSAGE_UNSUBSCRIBE_SUCCESS,
+                    'action_route' => self::ROUTE_UNSUBSCRIBE,
+                ]
             ],
             [
-                ['error' => self::RESPONSE_MESSAGE_FAIL_INVALID_EMAIL]
+                [
+                    'error' => self::RESPONSE_MESSAGE_FAIL_INVALID_EMAIL,
+                    'action_route' => self::ROUTE_UNSUBSCRIBE,
+                ]
             ]
         ];
     }
