@@ -1,4 +1,4 @@
-# Slim Framework Quote Sender
+# Developer Daily Quote Sender
 
 This is a small project which a series of tutorials for the Twilio blog will be based.
 The intention of the project is to show how to build a project using Slim Framework, Doctrine, and two Twilio services;
@@ -28,3 +28,8 @@ git clone git@github.com:settermjd/slim-doctrine-quote-sender.git
 cd slim-doctrine-quote-sender
 docker compose up -d
 ```
+
+## Further Reading
+
+- [Our Request to your Webhook URL (Twilio)](https://www.twilio.com/docs/messaging/guides/webhook-request)
+- [TwiML™ for Programmable SMS](https://www.twilio.com/docs/messaging/twiml#twilios-request-to-your-application)
