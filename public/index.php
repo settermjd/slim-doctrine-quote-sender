@@ -57,34 +57,30 @@ $app->group('/mobile', function (RouteCollectorProxy $group) use ($app) {
     });
 });
 
-$app->group('/subscribe', function (RouteCollectorProxy $group) use ($app) {
+$app->group('/email', function (RouteCollectorProxy $group) use ($app) {
 
-    // Render the form for users wanting to subscribe with their email address
-    $group
-        ->get('/by-email-address', [EmailSubscribeRequestFormHandler::class, 'handle'])
-        ->setName('subscribe-by-email-address-form');
+    $group->group('/request', function (RouteCollectorProxy $group) use ($app) {
 
-    // Handle requests to sign up by email address
-    $group
-        ->post('/by-email-address', [EmailSubscribeRequestHandler::class, 'handle'])
-        ->setName('subscribe-by-email-address');
+        // Render the form for users wanting to subscribe with their email address
+        $group
+            ->get('/subscribe', [EmailSubscribeRequestFormHandler::class, 'handle'])
+            ->setName('email.request.subscribe.form');
 
-})
-    ->addMiddleware(new FlashMessageMiddleware())
-    ->addMiddleware($container->get(SessionMiddleware::class));
+        // Handle requests to sign up by email address
+        $group
+            ->post('/subscribe', [EmailSubscribeRequestHandler::class, 'handle'])
+            ->setName('email.request.subscribe');
 
-$app->group('/unsubscribe', function (RouteCollectorProxy $group) use ($app)
-{
+        // Render the form for users wanting to unsubscribe with their email address
+        $group
+            ->get('/unsubscribe', [EmailUnsubscribeRequestFormHandler::class, 'handle'])
+            ->setName('email.request.unsubscribe.form');
 
-    // Render the form for users wanting to unsubscribe with their email address
-    $group
-        ->get('/by-email-address', [EmailUnsubscribeRequestFormHandler::class, 'handle'])
-        ->setName('subscribe-by-email-address-form');
-
-    // Handle requests to unsubscribe by email address
-    $group
-        ->post('/by-email-address', [EmailUnsubscribeRequestHandler::class, 'handle'])
-        ->setName('subscribe-by-email-address');
+        // Handle requests to unsubscribe by email address
+        $group
+            ->post('/unsubscribe', [EmailUnsubscribeRequestHandler::class, 'handle'])
+            ->setName('email.request.unsubscribe');
+    });
 
 })
     ->addMiddleware(new FlashMessageMiddleware())
