@@ -27,7 +27,7 @@ class TwilioWebhookRequestMiddleware
            );
         }
 
-        return match ($this->getKeywordMatch($params['Body'])) {
+        return match ($this->getRedirectType($params['Body'])) {
             self::REDIRECT_TYPE_SUBSCRIBE => $this->getResponse(
                 $handler,
                 $request,
@@ -42,7 +42,7 @@ class TwilioWebhookRequestMiddleware
         };
     }
 
-    private static function getKeywordMatch(string $keyword): string
+    private static function getRedirectType(string $keyword): string
     {
         $keyword = strtolower($keyword);
 
