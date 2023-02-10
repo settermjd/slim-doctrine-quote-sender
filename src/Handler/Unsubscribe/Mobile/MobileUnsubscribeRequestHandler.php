@@ -3,6 +3,7 @@
 namespace App\Handler\Unsubscribe\Mobile;
 
 use App\Service\UserService;
+use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\XmlResponse;
 use Laminas\InputFilter\InputFilterInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -46,8 +47,7 @@ EOF;
         ]);
         if ($this->inputFilter->isValid()) {
             $this->userService->removeByMobileNumber($this->inputFilter->getValue('mobileNumber'));
-            $twiml->message(self::RESPONSE_MESSAGE_SUCCESSFULLY_UNSUBSCRIBED);
-            return new XmlResponse($twiml->asXML());
+            return new EmptyResponse();
         }
 
         $twiml->message(self::RESPONSE_MESSAGE_INVALID_MOBILE_NUMBER);

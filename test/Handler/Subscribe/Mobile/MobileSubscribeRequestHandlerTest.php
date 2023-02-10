@@ -6,6 +6,7 @@ use App\Domain\User;
 use App\Handler\Subscribe\Mobile\MobileSubscribeRequestHandler;
 use App\InputFilter\MobileNumberInputFilter;
 use App\Service\UserService;
+use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\XmlResponse;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -46,15 +47,9 @@ class MobileSubscribeRequestHandlerTest extends TestCase
 
         $result = $handler->handle($this->request, $response, []);
 
-        $this->assertInstanceOf(XmlResponse::class, $result);
-
-        $twiml = <<<EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<Response><Message>You are now subscribed to the daily developer quotes service. 
-To unsubscribe, send another SMS to this number with the text: UNSUBSCRIBE</Message></Response>
-
-EOF;
-        $this->assertSame($twiml, $result->getBody()->getContents());
+        $this->assertInstanceOf(EmptyResponse::class, $result);
+        $this->assertSame(204, $result->getStatusCode());
+        $this->assertEmpty($result->getBody()->getContents());
     }
 
     /**

@@ -5,6 +5,7 @@ namespace AppTest\Handler\Unsubscribe\Mobile;
 use App\Handler\Unsubscribe\Mobile\MobileUnsubscribeRequestHandler;
 use App\InputFilter\MobileNumberInputFilter;
 use App\Service\UserService;
+use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\XmlResponse;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -42,15 +43,9 @@ class MobileUnsubscribeRequestHandlerTest extends TestCase
         $handler = new MobileUnsubscribeRequestHandler($this->userService, new MobileNumberInputFilter());
         $result = $handler->handle($this->request, $response, []);
 
-        $this->assertInstanceOf(XmlResponse::class, $result);
-
-        $twiml = <<<EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<Response><Message>You are now unsubscribed from the daily developer quotes service. 
-To resubscribe, send another SMS to this number with the text: SUBSCRIBE.</Message></Response>
-
-EOF;
-        $this->assertSame($twiml, $result->getBody()->getContents());
+        $this->assertInstanceOf(EmptyResponse::class, $result);
+        $this->assertSame(204, $result->getStatusCode());
+        $this->assertEmpty($result->getBody()->getContents());
     }
 
     public function testCannotUnsubscribeUserWithAnInvalidMobileNumber()
