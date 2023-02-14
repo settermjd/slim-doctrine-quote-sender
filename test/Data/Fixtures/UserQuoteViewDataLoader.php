@@ -12,7 +12,7 @@ class UserQuoteViewDataLoader extends AbstractFixture
     public function load(ObjectManager $manager)
     {
         /** @var User $user */
-        $user = $this->getReference('user-2-user');
+        $user = $this->getReference('user-3-user');
 
         /** @var Quote $quote */
         $quote = $manager

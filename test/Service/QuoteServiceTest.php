@@ -61,7 +61,7 @@ class QuoteServiceTest extends TestCase
             ->getRepository(User::class)
             ->findOneBy(
                 [
-                    'emailAddress' => 'user2@example.org',
+                    'emailAddress' => 'user3@example.org',
                 ]
             );
 
@@ -79,7 +79,7 @@ class QuoteServiceTest extends TestCase
             ->getRepository(User::class)
             ->findOneBy(
                 [
-                    'emailAddress' => 'user2@example.org',
+                    'emailAddress' => 'user3@example.org',
                 ]
             );
 
@@ -99,6 +99,6 @@ class QuoteServiceTest extends TestCase
         $userService = new UserService($this->entityManager);
         $quotes = $userService->getQuotes($user, QuoteType::Viewed);
         $this->assertCount(2, $quotes);
-        $this->assertTrue(in_array($quote, $quotes));
+        $this->assertTrue($quotes->contains($quote));
     }
 }

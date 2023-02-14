@@ -7,6 +7,8 @@ namespace App\Service;
 use App\Domain\Quote;
 use App\Domain\User;
 use App\QuoteType;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
 
 class UserService
@@ -77,25 +79,30 @@ class UserService
             );
     }
 
-    /**
-     * @return array<int,Quote>
-     */
-    public function getQuotes(User $user, QuoteType $quoteType): array
+    public function getQuotes(User $user, QuoteType $quoteType): Collection
     {
-        $quotes = $this->getViewedQuotes($user);
+        $quotes = $this->getViewedQuoteIDs($user);
 
-        $queryBuilder = $this->em->createQueryBuilder();
-        $wherePredicate = match($quoteType) {
-            QuoteType::Viewed => $queryBuilder->expr()->in('q.quoteId', $quotes),
-            QuoteType::Unviewed => $queryBuilder->expr()->notIn('q.quoteId', $quotes),
-        };
+        if ($quoteType === QuoteType::Viewed) {
+           return $user->getViewedQuotes();
+        }
 
-        return $queryBuilder
-            ->select('q')
-            ->from(Quote::class, 'q')
-            ->where($wherePredicate)
-            ->getQuery()
-            ->getResult();
+        if ($quoteType === QuoteType::Unviewed) {
+            if (empty($quotes)) {
+                return new ArrayCollection();
+            }
+
+            $queryBuilder = $this->em->createQueryBuilder();
+            $results = $queryBuilder
+                ->select('q')
+                ->from(Quote::class, 'q')
+                ->where($queryBuilder->expr()->notIn('q.quoteId', $quotes))
+                ->getQuery()
+                ->getResult();
+
+            return new ArrayCollection($results);
+        }
+
     }
 
     public function removeByMobileNumber(string $mobileNumber): bool
@@ -131,7 +138,7 @@ class UserService
     /**
      * @return array<int,Quote>
      */
-    public function getViewedQuotes(User $user): array
+    public function getViewedQuoteIDs(User $user): array
     {
         $quotes = [];
         $viewedQuotes = $user->getViewedQuotes();

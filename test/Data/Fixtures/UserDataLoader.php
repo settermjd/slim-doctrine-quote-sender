@@ -18,8 +18,28 @@ class UserDataLoader extends AbstractFixture
             ],
             [
                 'fullName' => 'User 2',
-                'emailAddress' => 'user2@example.org',
+                'emailAddress' => null,
                 'mobileNumber' => '+14155552672',
+            ],
+            [
+                'fullName' => 'User 3',
+                'emailAddress' => 'user3@example.org',
+                'mobileNumber' => null,
+            ],
+            [
+                'fullName' => 'User 4',
+                'emailAddress' => 'user4@example.org',
+                'mobileNumber' => null,
+            ],
+            [
+                'fullName' => 'User 5',
+                'emailAddress' => null,
+                'mobileNumber' => '+14155552673',
+            ],
+            [
+                'fullName' => 'User 6',
+                'emailAddress' => null,
+                'mobileNumber' => '+14155552674',
             ],
         ];
 

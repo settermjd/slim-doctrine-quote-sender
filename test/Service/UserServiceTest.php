@@ -69,27 +69,27 @@ class UserServiceTest extends TestCase
     {
         return [
             [
-                'User 3',
-                'user3@example.org',
+                'User 11',
+                'user11@example.org',
                 null
             ],
             [
-                'User 4',
-                'user4@example.org',
-                '+14155552671'
+                'User 12',
+                'user12@example.org',
+                '+14155552691'
             ],
             [
                 null,
-                'user5@example.org',
+                'user13@example.org',
                 null
             ],
             [
                 null,
                 null,
-                '+14155552671'
+                '+14155552692'
             ],
             [
-                'User 4',
+                'User 16',
                 null,
                 null,
             ],
@@ -228,7 +228,7 @@ class UserServiceTest extends TestCase
     public function testCanFindUserByEmailAddress()
     {
         $userService = new UserService($this->entityManager);
-        $user = $userService->findByEmailAddress('user2@example.org');
+        $user = $userService->findByEmailAddress('user3@example.org');
         $this->assertInstanceOf(User::class, $user);
     }
 
@@ -255,7 +255,7 @@ class UserServiceTest extends TestCase
             ->getRepository(User::class)
             ->findOneBy(
                 [
-                    'emailAddress' => 'user2@example.org',
+                    'emailAddress' => 'user3@example.org',
                 ]
             );
 
@@ -273,7 +273,7 @@ class UserServiceTest extends TestCase
             ->getRepository(User::class)
             ->findOneBy(
                 [
-                    'emailAddress' => 'user2@example.org',
+                    'emailAddress' => 'user3@example.org',
                 ]
             );
 
@@ -302,7 +302,7 @@ class UserServiceTest extends TestCase
 
     public function testCanDeleteUserByEmailAddress()
     {
-        $emailAddress = 'user2@example.org';
+        $emailAddress = 'user3@example.org';
 
         /** @var User $user */
         $user = $this->entityManager
