@@ -7,7 +7,6 @@ namespace App\Command;
 use App\Service\QuoteService;
 use App\Service\UserService;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Twilio\Rest\Client;
@@ -52,11 +51,6 @@ class SendDailyDeveloperQuotesToMobileUsersCommand extends Command
 
     protected function configure(): void
     {
-        $this->setHelp('This command allows you to send daily developer quotes.');
-        $this->addArgument(
-            'user_type',
-            InputArgument::REQUIRED,
-            'The user type to send quotes to'
-        );
+        $this->setHelp('This command allows you to send daily developer quotes to mobile subscribers.');
     }
 }
