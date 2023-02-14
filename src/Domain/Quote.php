@@ -80,4 +80,12 @@ class Quote
         $this->userQuoteViews[] = $user;
     }
 
+    /**
+     * Returns a string comprised of the quote and the author, used in a typical quote style.
+     */
+    public function getPrintableQuote(): string
+    {
+        return sprintf('%s - %s', $this->quoteText, $this->quoteAuthor->getFullName());
+    }
+
 }
