@@ -150,4 +150,29 @@ class UserService
         return $quotes;
     }
 
+    /**
+     * @return array<int,User>
+     */
+    public function getMobileUsers(): array
+    {
+        $queryBuilder = $this->em->createQueryBuilder();
+        return $queryBuilder
+            ->select('u')
+            ->from(User::class, 'u')
+            ->where($queryBuilder->expr()->isNotNull('u.mobileNumber'))
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getEmailUsers()
+    {
+        $queryBuilder = $this->em->createQueryBuilder();
+        return $queryBuilder
+            ->select('u')
+            ->from(User::class, 'u')
+            ->where($queryBuilder->expr()->isNotNull('u.emailAddress'))
+            ->getQuery()
+            ->getResult();
+    }
+
 }

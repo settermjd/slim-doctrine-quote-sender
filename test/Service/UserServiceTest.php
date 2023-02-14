@@ -315,4 +315,16 @@ class UserServiceTest extends TestCase
         );
         $this->assertFalse($this->entityManager->contains($user));
     }
+
+    public function testCanRetrieveAllMobileUsers()
+    {
+        $userService = new UserService($this->entityManager);
+        $this->assertCount(3, $userService->getMobileUsers());
+    }
+
+    public function testCanRetrieveAllEmailUsers()
+    {
+        $userService = new UserService($this->entityManager);
+        $this->assertCount(3, $userService->getEmailUsers());
+    }
 }
