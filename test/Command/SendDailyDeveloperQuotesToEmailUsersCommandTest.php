@@ -120,9 +120,13 @@ class SendDailyDeveloperQuotesToEmailUsersCommandTest extends TestCase
 
         $output = $this->createMock(OutputInterface::class);
         $output
-            ->expects($this->once())
+            ->expects($this->exactly(3))
             ->method('writeln')
-            ->with(sprintf('Sending quote to email address: %s', $emailAddress));
+            ->willReturnOnConsecutiveCalls(
+                "Sending quotes to email users",
+                sprintf('Sending quote to email address: %s', $emailAddress),
+                "Finished sending quotes to email users"
+            );
 
         $this->assertSame(
             Command::SUCCESS,

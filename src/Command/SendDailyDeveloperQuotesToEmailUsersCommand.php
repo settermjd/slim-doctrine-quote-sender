@@ -13,23 +13,33 @@ use SendGrid\Mail\Mail;
 use SendGrid\Mail\Personalization;
 use SendGrid\Mail\PlainTextContent;
 use SendGrid\Mail\To;
+use SendGrid\Mail\TypeException;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(
+    name: 'daily-developer-quotes:email-users',
+    description: 'Send daily developer quotes to email users.',
+)]
 class SendDailyDeveloperQuotesToEmailUsersCommand extends Command
 {
     public function __construct(
         private readonly UserService $userService,
         private readonly QuoteService $quoteService,
         private readonly \SendGrid $sendGrid
-    )
-    {
+    ) {
         parent::__construct();
     }
 
+    protected function configure(): void
+    {
+        $this->setHelp('This command allows you to send daily developer quotes to email subscribers.');
+    }
+
     /**
-     * @throws \SendGrid\Mail\TypeException
+     * @throws TypeException
      */
     public function buildMailMessage(Mail $mail, Quote $quote, User $user): Mail
     {
@@ -53,14 +63,15 @@ class SendDailyDeveloperQuotesToEmailUsersCommand extends Command
         return $mail;
     }
 
-    protected function configure(): void
-    {
-        $this->setHelp('This command allows you to send daily developer quotes to email subscribers.');
-    }
-
     public function execute(InputInterface  $input, OutputInterface $output): int
     {
         $users = $this->userService->getEmailUsers();
+        if (empty($users)) {
+            $output->writeln("No email users to send quotes to.");
+            return Command::SUCCESS;
+        }
+
+        $output->writeln("Sending quotes to email users");
 
         foreach ($users as $user) {
             $quote = $this->quoteService->getRandomQuoteForUser($user);
@@ -73,6 +84,7 @@ class SendDailyDeveloperQuotesToEmailUsersCommand extends Command
                 )
             );
         }
+        $output->writeln("Finished sending quotes to email users");
 
         return Command::SUCCESS;
     }
