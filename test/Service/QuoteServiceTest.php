@@ -72,6 +72,24 @@ class QuoteServiceTest extends TestCase
         );
     }
 
+    public function testCanRetrieveRandomQuoteForMobileUser()
+    {
+        /** @var User $user */
+        $user = $this->entityManager
+            ->getRepository(User::class)
+            ->findOneBy(
+                [
+                    'mobileNumber' => '+14155552672',
+                ]
+            );
+
+        $this->assertInstanceOf(
+            Quote::class,
+            (new QuoteService($this->entityManager))
+                ->getRandomQuoteForMobileUser($user)
+        );
+    }
+
     public function testCanMarkQuoteAsHavingBeingSentToUser()
     {
         /** @var User $user */

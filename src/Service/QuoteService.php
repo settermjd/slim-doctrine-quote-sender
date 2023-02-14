@@ -10,6 +10,8 @@ use Doctrine\ORM\EntityManager;
 
 class QuoteService
 {
+    public const SMS_MAX_LENGTH = 160;
+
     public function __construct(private readonly EntityManager $em)
     {
     }
@@ -50,6 +52,23 @@ class QuoteService
         $this->em->flush();
 
         return true;
+    }
+
+    public function getRandomQuoteForMobileUser(User $user): Quote|null
+    {
+        $queryBuilder = $this->em->createQueryBuilder();
+        return $queryBuilder
+            ->select('q')
+            ->from(Quote::class, 'q')
+            ->where(
+                $queryBuilder->expr()->lte(
+                    $queryBuilder->expr()->length('q.quoteText'),
+                    self::SMS_MAX_LENGTH
+                )
+            )
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
 }
