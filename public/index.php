@@ -23,6 +23,19 @@ use Slim\Views\TwigMiddleware;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+/**
+ * Load the project's environment variables
+ */
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
+$dotenv->required([
+    'SENDGRID_API_KEY',
+    'SEND_FROM_EMAIL_ADDRESS',
+    'TWILIO_ACCOUNT_SID',
+    'TWILIO_AUTH_TOKEN',
+    'TWILIO_PHONE_NUMBER',
+]);
+
 /** @var Container $container */
 $container = require_once __DIR__ . '/../container.php';
 
