@@ -164,7 +164,10 @@ class UserService
             ->getResult();
     }
 
-    public function getEmailUsers()
+    /**
+     * @return array<int,User>
+     */
+    public function getEmailUsers(): array
     {
         $queryBuilder = $this->em->createQueryBuilder();
         return $queryBuilder
