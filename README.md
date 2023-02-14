@@ -21,11 +21,27 @@ To use this project, you will need to have the following:
 
 ## Usage
 
-To use the project, first clone it locally, then change into the cloned directory and start the application, by running the following commands:
+To use the project, first clone it locally, then change into the cloned directory by running the following commands:
 
 ```bash
 git clone git@github.com:settermjd/slim-doctrine-quote-sender.git
 cd slim-doctrine-quote-sender
+```
+
+After that, copy _.env.local_ as *.env* and set the five required environment variables in _.env_.
+These are 
+
+| Environment Variable      | Description                                                                                                                                                                   |
+|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `SENDGRID_API_KEY`        | This is your SendGrid API key, required to make authenticated requests against SendGrid's APIs.                                                                               |
+| `SEND_FROM_EMAIL_ADDRESS` | This is the email address which emails will be sent from. The sender must be [authenticated](https://docs.sendgrid.com/glossary/sender-authentication).                       |
+| `TWILIO_PHONE_NUMBER`     | This is the Twilio phone number which SMS will be sent from.                                                                                                                  |
+| `TWILIO_ACCOUNT_SID`      | This is your Twilio Account SID (or username) required to make authenticated requests against Twilio's APIs. This is available in the Project Info tab of the Twilio Console. |
+| `TWILIO_AUTH_TOKEN`       | This is your Twilio Auth Token (or password) required to make authenticated requests against Twilio's APIs. This is available in the Project Info tab of the Twilio Console.  |                                                                 |
+
+Then start the application by running the following command:
+
+```bash
 docker compose up -d
 ```
 
