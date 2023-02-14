@@ -30,7 +30,7 @@ class SendDailyDeveloperQuotesToMobileUsersCommand extends Command
 
         foreach ($users as $user) {
             $quote = $this->quoteService
-                        ->getRandomQuoteForUser($user);
+                        ->getRandomQuoteForMobileUser($user);
             $this->client->messages->create(
                 $user->getMobileNumber(),
                 [

@@ -84,7 +84,7 @@ class SendDailyDeveloperQuotesToMobileUsersCommandTest extends TestCase
         $quoteService = $this->createMock(QuoteService::class);
         $quoteService
             ->expects($this->once())
-            ->method('getRandomQuoteForUser')
+            ->method('getRandomQuoteForMobileUser')
             ->with($user)
             ->willReturn($quote);
 
