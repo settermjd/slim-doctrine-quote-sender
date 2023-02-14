@@ -53,11 +53,11 @@ $container->set(EntityManager::class, static function (Container $c): EntityMana
 });
 
 $container->set(SendGrid::class, static function(Container $c): SendGrid {
-    return new SendGrid($_SERVER('SENDGRID_API_KEY'));
+    return new SendGrid($_SERVER['SENDGRID_API_KEY']);
 });
 
 $container->set(Client::class, static function(Container $c): Client {
-    return new Client($_SERVER('TWILIO_ACCOUNT_SID'), $_SERVER('TWILIO_AUTH_TOKEN'));
+    return new Client($_SERVER['TWILIO_ACCOUNT_SID'], $_SERVER['TWILIO_AUTH_TOKEN']);
 });
 
 $container->set(SessionPersistenceInterface::class, static function(Container $c): SessionPersistenceInterface {
