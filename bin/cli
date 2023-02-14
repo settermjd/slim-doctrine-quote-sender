@@ -1,0 +1,45 @@
+#!/usr/bin/env php
+<?php
+
+use App\Command\SendDailyDeveloperQuotesToEmailUsersCommand;
+use App\Command\SendDailyDeveloperQuotesToMobileUsersCommand;
+use App\Service\QuoteService;
+use App\Service\UserService;
+use DI\Container;
+use Symfony\Component\Console\Application;
+use Twilio\Rest\Client;
+
+require __DIR__.'/../vendor/autoload.php';
+
+/**
+ * Load the project's environment variables
+ */
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+$dotenv->required([
+    'SENDGRID_API_KEY',
+    'SEND_FROM_EMAIL_ADDRESS',
+    'TWILIO_ACCOUNT_SID',
+    'TWILIO_AUTH_TOKEN',
+    'TWILIO_PHONE_NUMBER',
+]);
+
+$application = new Application('cli', '1.0.0');
+
+/** @var Container $container */
+$container = require __DIR__ . '/../container.php';
+
+$mobileUsersCommand = new SendDailyDeveloperQuotesToMobileUsersCommand(
+    $container->get(UserService::class),
+    $container->get(QuoteService::class),
+    $container->get(Client::class)
+);
+$emailUsersCommand = new SendDailyDeveloperQuotesToEmailUsersCommand(
+    $container->get(UserService::class),
+    $container->get(QuoteService::class),
+    $container->get(SendGrid::class)
+);
+$application->add($mobileUsersCommand);
+$application->add($emailUsersCommand);
+
+$application->run();

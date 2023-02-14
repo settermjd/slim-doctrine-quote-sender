@@ -38,6 +38,8 @@
         }
     },
     "scripts": {
+        "cli": "bin/cli",
+        "docker-cli": "docker compose exec php bin/cli",
         "serve": [
             "php -S 0.0.0.0:8080 -t public/"
         ],
