@@ -7,33 +7,27 @@ namespace App\Domain;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\CustomIdGenerator;
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\OneToMany;
-use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 
-#[Entity, Table(name: 'quote_authors')]
+#[ORM\Entity, ORM\Table(name: 'quote_authors')]
 class Author
 {
     #[
-        Id,
-        Column(name: "author_id", type: 'uuid'),
-        GeneratedValue(strategy: 'CUSTOM'),
-        CustomIdGenerator(class: UuidGenerator::class)
+        ORM\Id,
+        ORM\Column(name: "author_id", type: 'uuid'),
+        ORM\GeneratedValue(strategy: 'CUSTOM'),
+        ORM\CustomIdGenerator(class: UuidGenerator::class)
     ]
     private string|null $authorId = null;
 
-    #[Column(name: "full_name", type: 'string', length: 200, unique: true, nullable: false)]
+    #[ORM\Column(name: "full_name", type: 'string', length: 200, unique: true, nullable: false)]
     private string $fullName;
 
-    #[Column(name: 'created_at', type: 'datetimetz_immutable', nullable: false)]
+    #[ORM\Column(name: 'created_at', type: 'datetimetz_immutable', nullable: false)]
     private DateTimeImmutable $createdAt;
 
-    #[OneToMany(targetEntity: Quote::class, mappedBy: 'quote')]
+    #[ORM\OneToMany(targetEntity: Quote::class, mappedBy: 'quote')]
     private Collection $quotes;
 
     public function __construct(string $fullName)
