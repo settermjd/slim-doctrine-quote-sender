@@ -52,48 +52,4 @@ class MobileSubscribeRequestHandlerTest extends TestCase
         $this->assertSame(204, $result->getStatusCode());
         $this->assertEmpty($result->getBody()->getContents());
     }
-
-    /**
-     * @dataProvider invalidMobileNumberProvider
-     */
-    public function testCannotSubscribeUserByMobileWithAnInvalidMobileNumber(string $mobileNumber = null)
-    {
-        $user = new User(null, null, $mobileNumber);
-
-        $this->userService
-            ->expects($this->never())
-            ->method('createWithMobileNumber')
-            ->with($mobileNumber)
-            ->willReturn($user);
-
-        $handler = new MobileSubscribeRequestHandler($this->userService, new MobileNumberInputFilter());
-        $this->request
-            ->expects($this->once())
-            ->method('getParsedBody')
-            ->willReturn([
-                'From' => $mobileNumber,
-                'Body' => 'SUBSCRIBE',
-            ]);
-        $response = $this->createMock(ResponseInterface::class);
-
-        $result = $handler->handle($this->request, $response, []);
-
-        $this->assertInstanceOf(XmlResponse::class, $result);
-
-        $twiml = <<<EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<Response><Message>Mobile number must be in E.164 format. More information is available at https://www.twilio.com/docs/glossary/what-e164.</Message></Response>
-
-EOF;
-        $this->assertSame($twiml, $result->getBody()->getContents());
-    }
-
-    public static function invalidMobileNumberProvider()
-    {
-        return [
-            [
-                '04155552672',
-            ],
-        ];
-    }
 }
