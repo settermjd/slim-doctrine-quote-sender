@@ -8,6 +8,9 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Laminas\InputFilter\Input;
+use Laminas\InputFilter\InputFilter;
+use Laminas\Validator\NotEmpty;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 #[ORM\Entity, ORM\Table(name: 'quote_authors')]
@@ -49,5 +52,22 @@ class Author
     {
         return $this->quotes;
     }
+
+    public function isValid(): bool
+    {
+        $fullName = new Input('fullName');
+        $fullName->getValidatorChain()
+            ->attach(new NotEmpty());
+
+        $inputFilter = new InputFilter();
+        $inputFilter->add($fullName);
+
+        $inputFilter->setData([
+            'fullName' => $this->fullName
+        ]);
+
+        return $inputFilter->isValid();
+    }
+
 
 }
