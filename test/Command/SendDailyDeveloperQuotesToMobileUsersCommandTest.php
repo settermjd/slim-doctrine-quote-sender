@@ -5,6 +5,7 @@ namespace AppTest\Command;
 use App\Command\SendDailyDeveloperQuotesToMobileUsersCommand;
 use App\Domain\Quote;
 use App\Domain\User;
+use App\Repository\QuoteRepository;
 use App\Service\QuoteService;
 use App\Service\UserService;
 use AppTest\Data\Fixtures\QuoteAuthorDataLoader;
@@ -75,19 +76,6 @@ class SendDailyDeveloperQuotesToMobileUsersCommandTest extends TestCase
                 'quoteText' => "Any fool can write code that a computer can understand. Good programmers write code that humans can understand."
             ]);
 
-        $userService = $this->createMock(UserService::class);
-        $userService
-            ->expects($this->once())
-            ->method('getMobileUsers')
-            ->willReturn([$user]);
-
-        $quoteService = $this->createMock(QuoteService::class);
-        $quoteService
-            ->expects($this->once())
-            ->method('getRandomQuoteForMobileUser')
-            ->with($user)
-            ->willReturn($quote);
-
         $messages = $this->createMock(MessageList::class);
         $messages
             ->expects($this->once())
@@ -113,11 +101,14 @@ class SendDailyDeveloperQuotesToMobileUsersCommandTest extends TestCase
 
         $_ENV['TWILIO_PHONE_NUMBER'] = $twilioNumber;
 
-        $command = new SendDailyDeveloperQuotesToMobileUsersCommand(
-            $userService,
-            $quoteService,
-            $client
-        );
+        $quoteRepository = $this->createMock(QuoteRepository::class);
+        $quoteRepository
+            ->expects($this->once())
+            ->method('getRandomQuoteForMobileUser')
+            ->with($user)
+            ->willReturn($quote);
+
+        $command = new SendDailyDeveloperQuotesToMobileUsersCommand([$user], $quoteRepository, $client);
 
         $output = $this->createMock(OutputInterface::class);
         $output

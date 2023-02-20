@@ -245,41 +245,6 @@ class UserServiceTest extends TestCase
         );
     }
 
-    public function testCanRetrieveListOfUnviewedQuotes()
-    {
-        /** @var User $user */
-        $user = $this->entityManager
-            ->getRepository(User::class)
-            ->findOneBy(
-                [
-                    'emailAddress' => 'user3@example.org',
-                ]
-            );
-
-        $userService = new UserService($this->entityManager);
-        $this->assertCount(
-            6,
-            $userService->getQuotes($user, QuoteType::Unviewed)
-        );
-    }
-
-    public function testCanRetrieveListOfViewedQuotes()
-    {
-        /** @var User $user */
-        $user = $this->entityManager
-            ->getRepository(User::class)
-            ->findOneBy(
-                [
-                    'emailAddress' => 'user3@example.org',
-                ]
-            );
-
-        $userService = new UserService($this->entityManager);
-        $this->assertCount(
-            1,
-            $userService->getQuotes($user, QuoteType::Viewed)
-        );
-    }
 
     public function testCanDeleteUserByMobileNumber()
     {
@@ -311,17 +276,5 @@ class UserServiceTest extends TestCase
                 ->removeByEmailAddress($emailAddress)
         );
         $this->assertFalse($this->entityManager->contains($user));
-    }
-
-    public function testCanRetrieveAllMobileUsers()
-    {
-        $userService = new UserService($this->entityManager);
-        $this->assertCount(3, $userService->getMobileUsers());
-    }
-
-    public function testCanRetrieveAllEmailUsers()
-    {
-        $userService = new UserService($this->entityManager);
-        $this->assertCount(3, $userService->getEmailUsers());
     }
 }

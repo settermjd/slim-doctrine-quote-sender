@@ -1,15 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
-namespace AppTest\Service;
+namespace AppTest\Repository;
 
 use App\Domain\Quote;
 use App\Domain\User;
-use App\QuoteType;
+use App\Repository\QuoteRepository;
 use App\Repository\UserRepository;
 use App\Service\QuoteService;
-use App\Service\UserService;
 use AppTest\Data\Fixtures\QuoteAuthorDataLoader;
 use AppTest\Data\Fixtures\QuoteDataLoader;
 use AppTest\Data\Fixtures\UserDataLoader;
@@ -19,15 +16,18 @@ use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
-class QuoteServiceTest extends TestCase
+class QuoteRepositoryTest extends TestCase
 {
     private EntityManager|null $entityManager;
     private ORMPurger $purger;
+    private QuoteRepository $quoteRepository;
+    private UserRepository $userRepository;
 
     public function setUp(): void
     {
-        /** @var \Psr\Container\ContainerInterface $container */
+        /** @var ContainerInterface $container */
         $container = require_once __DIR__ . '/../../container.php';
 
         $loader = new Loader();
@@ -37,6 +37,8 @@ class QuoteServiceTest extends TestCase
         $loader->addFixture(new UserQuoteViewDataLoader());
 
         $this->entityManager = $container->get(EntityManager::class);
+        $this->quoteRepository = $this->entityManager->getRepository(Quote::class);
+        $this->userRepository = $this->entityManager->getRepository(User::class);
 
         $this->purger = new ORMPurger();
         $executor = new ORMExecutor($this->entityManager, $this->purger);
@@ -55,32 +57,29 @@ class QuoteServiceTest extends TestCase
         $this->entityManager = null;
     }
 
-    public function testCanMarkQuoteAsHavingBeingSentToUser()
+    public function testCanRetrieveRandomQuoteForUser()
     {
-        /** @var UserRepository $userRepository */
-        $userRepository = $this->entityManager->getRepository(User::class);
-
         /** @var User $user */
-        $user = $userRepository->findOneBy([
+        $user = $this->userRepository->findOneBy([
             'emailAddress' => 'user3@example.org',
         ]);
 
-        /** @var Quote $quote */
-        $quote = $this->entityManager
-            ->getRepository(Quote::class)
-            ->findOneBy(
-                [
-                    'quoteText' => "Don't comment bad code - rewrite it."
-                ]
-            );
+        $this->assertInstanceOf(
+            Quote::class,
+            $this->quoteRepository->getRandomQuoteForUser($user)
+        );
+    }
 
-        $result = (new QuoteService($this->entityManager))
-            ->markQuoteAsSentToUser($user, $quote);
-        $this->assertTrue($result);
+    public function testCanRetrieveRandomQuoteForMobileUser()
+    {
+        /** @var User $user */
+        $user = $this->userRepository->findOneBy([
+            'mobileNumber' => '+14155552672',
+        ]);
 
-        $userService = new UserService($this->entityManager);
-        $quotes = $userRepository->getQuotes($user, QuoteType::Viewed);
-        $this->assertCount(2, $quotes);
-        $this->assertTrue($quotes->contains($quote));
+        $this->assertInstanceOf(
+            Quote::class,
+            $this->quoteRepository->getRandomQuoteForMobileUser($user)
+        );
     }
 }

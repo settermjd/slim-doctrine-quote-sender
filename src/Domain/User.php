@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain;
 
-use DateTimeImmutable;
+use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -102,6 +102,21 @@ class User
     public function addViewedQuote(Quote $quote)
     {
         $this->quotes->add($quote);
+    }
+
+    /**
+     * @return array<int,Quote>
+     */
+    public function getViewedQuoteIDs(): array
+    {
+        $quotes = [];
+        $viewedQuotes = $this->getViewedQuotes();
+        foreach ($viewedQuotes as $viewedQuote) {
+            /** @var Quote $viewedQuote */
+            $quotes[] = $viewedQuote->getQuoteId();
+        }
+
+        return $quotes;
     }
 
     public function isValid(): bool

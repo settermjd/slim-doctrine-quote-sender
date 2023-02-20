@@ -1,14 +1,10 @@
 <?php
 
-declare(strict_types=1);
+namespace AppTest\Repository;
 
-namespace AppTest\Service;
-
-use App\Domain\Quote;
 use App\Domain\User;
 use App\QuoteType;
 use App\Repository\UserRepository;
-use App\Service\QuoteService;
 use App\Service\UserService;
 use AppTest\Data\Fixtures\QuoteAuthorDataLoader;
 use AppTest\Data\Fixtures\QuoteDataLoader;
@@ -19,15 +15,17 @@ use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
-class QuoteServiceTest extends TestCase
+class UserRepositoryTest extends TestCase
 {
     private EntityManager|null $entityManager;
     private ORMPurger $purger;
+    private UserRepository $userRepository;
 
     public function setUp(): void
     {
-        /** @var \Psr\Container\ContainerInterface $container */
+        /** @var ContainerInterface $container */
         $container = require_once __DIR__ . '/../../container.php';
 
         $loader = new Loader();
@@ -37,6 +35,7 @@ class QuoteServiceTest extends TestCase
         $loader->addFixture(new UserQuoteViewDataLoader());
 
         $this->entityManager = $container->get(EntityManager::class);
+        $this->userRepository = $this->entityManager->getRepository(User::class);
 
         $this->purger = new ORMPurger();
         $executor = new ORMExecutor($this->entityManager, $this->purger);
@@ -55,32 +54,50 @@ class QuoteServiceTest extends TestCase
         $this->entityManager = null;
     }
 
-    public function testCanMarkQuoteAsHavingBeingSentToUser()
+    public function testCanRetrieveListOfUnviewedQuotes()
     {
-        /** @var UserRepository $userRepository */
-        $userRepository = $this->entityManager->getRepository(User::class);
-
         /** @var User $user */
-        $user = $userRepository->findOneBy([
+        $user = $this->userRepository->findOneBy([
             'emailAddress' => 'user3@example.org',
         ]);
 
-        /** @var Quote $quote */
-        $quote = $this->entityManager
-            ->getRepository(Quote::class)
-            ->findOneBy(
-                [
-                    'quoteText' => "Don't comment bad code - rewrite it."
-                ]
-            );
+        $userService = new UserService($this->entityManager);
+        $this->assertCount(
+            6,
+            $this->userRepository->getQuotes($user, QuoteType::Unviewed)
+        );
+    }
 
-        $result = (new QuoteService($this->entityManager))
-            ->markQuoteAsSentToUser($user, $quote);
-        $this->assertTrue($result);
+    public function testCanRetrieveListOfViewedQuotes()
+    {
+        /** @var User $user */
+        $user = $this->userRepository->findOneBy([
+            'emailAddress' => 'user3@example.org',
+        ]);
 
         $userService = new UserService($this->entityManager);
-        $quotes = $userRepository->getQuotes($user, QuoteType::Viewed);
-        $this->assertCount(2, $quotes);
-        $this->assertTrue($quotes->contains($quote));
+        $this->assertCount(
+            1,
+            $this->userRepository->getQuotes($user, QuoteType::Viewed)
+        );
     }
+
+    public function testCanRetrieveAllMobileUsers()
+    {
+        $userService = new UserService($this->entityManager);
+        $this->assertCount(
+            3,
+            $this->userRepository->getMobileUsers()
+        );
+    }
+
+    public function testCanRetrieveAllEmailUsers()
+    {
+        $userService = new UserService($this->entityManager);
+        $this->assertCount(
+            3,
+            $this->userRepository->getEmailUsers()
+        );
+    }
+
 }

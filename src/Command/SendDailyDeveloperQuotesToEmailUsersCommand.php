@@ -6,6 +6,7 @@ namespace App\Command;
 
 use App\Domain\Quote;
 use App\Domain\User;
+use App\Repository\QuoteRepository;
 use App\Service\QuoteService;
 use App\Service\UserService;
 use SendGrid\Mail\HtmlContent;
@@ -25,9 +26,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class SendDailyDeveloperQuotesToEmailUsersCommand extends Command
 {
+    /**
+     * @param array<int,User> $emailUsers
+     */
     public function __construct(
-        private readonly UserService $userService,
-        private readonly QuoteService $quoteService,
+        private readonly array $emailUsers,
+        private readonly QuoteRepository $quoteService,
         private readonly \SendGrid $sendGrid
     ) {
         parent::__construct();
@@ -65,15 +69,14 @@ class SendDailyDeveloperQuotesToEmailUsersCommand extends Command
 
     public function execute(InputInterface  $input, OutputInterface $output): int
     {
-        $users = $this->userService->getEmailUsers();
-        if (empty($users)) {
+        if (empty($this->emailUsers)) {
             $output->writeln("No email users to send quotes to.");
             return Command::SUCCESS;
         }
 
         $output->writeln("Sending quotes to email users");
 
-        foreach ($users as $user) {
+        foreach ($this->emailUsers as $user) {
             $quote = $this->quoteService->getRandomQuoteForUser($user);
             $this->sendGrid->send($this->buildMailMessage(new Mail(), $quote, $user));
 

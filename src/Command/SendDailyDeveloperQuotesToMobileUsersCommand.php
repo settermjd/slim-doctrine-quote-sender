@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Service\QuoteService;
-use App\Service\UserService;
+use App\Repository\QuoteRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,9 +18,9 @@ use Twilio\Rest\Client;
 class SendDailyDeveloperQuotesToMobileUsersCommand extends Command
 {
     public function __construct(
-        private readonly UserService $userService,
-        private readonly QuoteService $quoteService,
-        private readonly Client $client
+        private readonly array           $users,
+        private readonly QuoteRepository $quoteRepository,
+        private readonly Client          $client
     ) {
         parent::__construct();
     }
@@ -33,17 +32,15 @@ class SendDailyDeveloperQuotesToMobileUsersCommand extends Command
 
     public function execute(InputInterface  $input, OutputInterface $output): int
     {
-        $users = $this->userService->getMobileUsers();
-        if (empty($users)) {
+        if (empty($this->users)) {
             $output->writeln("No mobile users to send quotes to.");
             return Command::SUCCESS;
         }
 
         $output->writeln("Sending quotes to mobile users");
 
-        foreach ($users as $user) {
-            $quote = $this->quoteService
-                        ->getRandomQuoteForMobileUser($user);
+        foreach ($this->users as $user) {
+            $quote = $this->quoteRepository->getRandomQuoteForMobileUser($user);
             $this->client->messages->create(
                 $user->getMobileNumber(),
                 [

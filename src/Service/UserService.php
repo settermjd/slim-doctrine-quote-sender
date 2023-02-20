@@ -77,31 +77,6 @@ class UserService
             );
     }
 
-    public function getQuotes(User $user, QuoteType $quoteType): Collection
-    {
-        $quotes = $this->getViewedQuoteIDs($user);
-
-        if ($quoteType === QuoteType::Viewed) {
-           return $user->getViewedQuotes();
-        }
-
-        if ($quoteType === QuoteType::Unviewed) {
-            if (empty($quotes)) {
-                return new ArrayCollection();
-            }
-
-            $queryBuilder = $this->em->createQueryBuilder();
-            $results = $queryBuilder
-                ->select('q')
-                ->from(Quote::class, 'q')
-                ->where($queryBuilder->expr()->notIn('q.quoteId', $quotes))
-                ->getQuery()
-                ->getResult();
-
-            return new ArrayCollection($results);
-        }
-
-    }
 
     public function removeByMobileNumber(string $mobileNumber): bool
     {
@@ -131,49 +106,6 @@ class UserService
         $this->em->flush();
 
         return true;
-    }
-
-    /**
-     * @return array<int,Quote>
-     */
-    public function getViewedQuoteIDs(User $user): array
-    {
-        $quotes = [];
-        $viewedQuotes = $user->getViewedQuotes();
-        foreach ($viewedQuotes as $viewedQuote) {
-            /** @var Quote $viewedQuote */
-            $quotes[] = $viewedQuote->getQuoteId();
-        }
-
-        return $quotes;
-    }
-
-    /**
-     * @return array<int,User>
-     */
-    public function getMobileUsers(): array
-    {
-        $queryBuilder = $this->em->createQueryBuilder();
-        return $queryBuilder
-            ->select('u')
-            ->from(User::class, 'u')
-            ->where($queryBuilder->expr()->isNotNull('u.mobileNumber'))
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * @return array<int,User>
-     */
-    public function getEmailUsers(): array
-    {
-        $queryBuilder = $this->em->createQueryBuilder();
-        return $queryBuilder
-            ->select('u')
-            ->from(User::class, 'u')
-            ->where($queryBuilder->expr()->isNotNull('u.emailAddress'))
-            ->getQuery()
-            ->getResult();
     }
 
 }

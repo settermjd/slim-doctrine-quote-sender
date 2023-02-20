@@ -5,6 +5,7 @@ namespace AppTest\Command;
 use App\Command\SendDailyDeveloperQuotesToEmailUsersCommand;
 use App\Domain\Quote;
 use App\Domain\User;
+use App\Repository\QuoteRepository;
 use App\Service\QuoteService;
 use App\Service\UserService;
 use AppTest\Data\Fixtures\QuoteAuthorDataLoader;
@@ -80,19 +81,6 @@ class SendDailyDeveloperQuotesToEmailUsersCommandTest extends TestCase
                 'quoteText' => "Any fool can write code that a computer can understand. Good programmers write code that humans can understand."
             ]);
 
-        $userService = $this->createMock(UserService::class);
-        $userService
-            ->expects($this->once())
-            ->method('getEmailUsers')
-            ->willReturn([$user]);
-
-        $quoteService = $this->createMock(QuoteService::class);
-        $quoteService
-            ->expects($this->once())
-            ->method('getRandomQuoteForUser')
-            ->with($user)
-            ->willReturn($quote);
-
         $mail = new Mail();
         $mail->setFrom($_ENV['SEND_FROM_EMAIL_ADDRESS']);
         $mail->setReplyTo($_ENV['SEND_FROM_EMAIL_ADDRESS']);
@@ -112,11 +100,14 @@ class SendDailyDeveloperQuotesToEmailUsersCommandTest extends TestCase
             ->method('send')
             ->with($mail);
 
-        $command = new SendDailyDeveloperQuotesToEmailUsersCommand(
-            $userService,
-            $quoteService,
-            $sendGrid
-        );
+        $quoteRepository = $this->createMock(QuoteRepository::class);
+        $quoteRepository
+            ->expects($this->once())
+            ->method('getRandomQuoteForUser')
+            ->with($user)
+            ->willReturn($quote);
+
+        $command = new SendDailyDeveloperQuotesToEmailUsersCommand([$user], $quoteRepository, $sendGrid);
 
         $output = $this->createMock(OutputInterface::class);
         $output
