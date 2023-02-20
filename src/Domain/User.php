@@ -8,7 +8,7 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Laminas\Validator\EmailAddress;
+use Laminas\InputFilter\InputFilterInterface;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 #[ORM\Entity(repositoryClass: UserRepository::class), ORM\Table(name: 'quote_users')]
@@ -45,13 +45,33 @@ class User
     #[ORM\InverseJoinColumn(name: 'quote_id', referencedColumnName: 'quote_id')]
     private Collection $quotes;
 
-    public function __construct(string $fullName = null, string $emailAddress = null, string $mobileNumber = null)
-    {
-        $this->registeredAt = new DateTimeImmutable('now');
+    public function __construct(
+        private InputFilterInterface $inputFilter,
+        string $fullName = null,
+        string $emailAddress = null,
+        string $mobileNumber = null
+    ) {
         $this->emailAddress = $emailAddress;
         $this->fullName = $fullName;
         $this->mobileNumber = $mobileNumber;
         $this->quotes = new ArrayCollection();
+
+        if (! $this->isValid()) {
+            $reason = '';
+            $messages = $this->inputFilter->getMessages();
+
+            if (array_key_exists('mobileNumber', $messages)) {
+                $reason .= implode(', ', $messages['mobileNumber']);
+            }
+
+            if (array_key_exists('emailAddress', $messages)) {
+                $reason .= implode(', ', $messages['emailAddress']);
+            }
+
+            throw new \InvalidArgumentException(
+                sprintf('Entity is not in a valid state. Reason: %s', $reason)
+            );
+        }
     }
 
     public function getUserId(): string
@@ -84,23 +104,15 @@ class User
         $this->quotes->add($quote);
     }
 
-    #[ORM\PrePersist, ORM\PreUpdate]
-    public function validate()
+    public function isValid(): bool
     {
-        if (! is_null($this->mobileNumber) && ! preg_match('/^\+[1-9]\d{1,14}$/', $this->mobileNumber)) {
-            throw new \InvalidArgumentException(
-                'Mobile number must be in E.164 format. More information is available at https://www.twilio.com/docs/glossary/what-e164.'
-            );
-        }
+        $this->inputFilter->setData([
+            'emailAddress' => $this->emailAddress,
+            'fullName' => $this->fullName,
+            'mobileNumber' => $this->mobileNumber,
+        ]);
 
-        if (
-            ! is_null($this->emailAddress)
-            && ! (new EmailAddress())->isValid($this->emailAddress)
-        ) {
-            throw new \InvalidArgumentException(
-                'Email address must be a valid email address.'
-            );
-        }
+        return $this->inputFilter->isValid();
     }
 
 }

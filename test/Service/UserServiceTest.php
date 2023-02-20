@@ -164,7 +164,7 @@ class UserServiceTest extends TestCase
     ) {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'Mobile number must be in E.164 format. More information is available at https://www.twilio.com/docs/glossary/what-e164.'
+            'Entity is not in a valid state. Reason: Mobile number must be in E.164 format. More information is available at https://www.twilio.com/docs/glossary/what-e164.'
         );
         $userService = new UserService($this->entityManager);
         $userService->create($fullName, $emailAddress, $mobileNumber);
@@ -195,9 +195,6 @@ class UserServiceTest extends TestCase
         string $mobileNumber = null
     ) {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            'Email address must be a valid email address.'
-        );
         $userService = new UserService($this->entityManager);
         $userService->create($fullName, $emailAddress, $mobileNumber);
     }

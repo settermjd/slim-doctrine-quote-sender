@@ -5,6 +5,7 @@ namespace AppTest\Handler\Subscribe\Mobile;
 use App\Domain\User;
 use App\Handler\Subscribe\Mobile\MobileSubscribeRequestHandler;
 use App\InputFilter\MobileNumberInputFilter;
+use App\InputFilter\UserInputFilter;
 use App\Service\UserService;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\XmlResponse;
@@ -24,10 +25,10 @@ class MobileSubscribeRequestHandlerTest extends TestCase
         $this->userService = $this->createMock(UserService::class);
     }
 
-    public function testCanSubscribeUserByMobile()
+    public function testCanSubscribeUserByMobileWithMobileNumberInE164Format()
     {
         $mobileNumber = '+14155552672';
-        $user = new User('', null, $mobileNumber);
+        $user = new User(new UserInputFilter(), '', null, $mobileNumber);
 
         $this->userService
             ->expects($this->once())

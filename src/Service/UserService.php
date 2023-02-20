@@ -6,9 +6,7 @@ namespace App\Service;
 
 use App\Domain\Quote;
 use App\Domain\User;
-use App\QuoteType;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\InputFilter\UserInputFilter;
 use Doctrine\ORM\EntityManager;
 
 class UserService
@@ -19,7 +17,7 @@ class UserService
 
     public function create(string $fullName = null, string $emailAddress = null, string $mobileNumber = null): User
     {
-        $newUser = new User($fullName, $emailAddress, $mobileNumber);
+        $newUser = new User(new UserInputFilter(), $fullName, $emailAddress, $mobileNumber);
 
         $this->em->persist($newUser);
         $this->em->flush();
@@ -34,7 +32,7 @@ class UserService
             return $user;
         }
 
-        $newUser = new User(null, null, $mobileNumber);
+        $newUser = new User(new UserInputFilter(), null, null, $mobileNumber);
 
         $this->em->persist($newUser);
         $this->em->flush();
@@ -49,7 +47,7 @@ class UserService
             return $user;
         }
 
-        $newUser = new User(null, $emailAddress, null);
+        $newUser = new User(new UserInputFilter(), null, $emailAddress, null);
 
         $this->em->persist($newUser);
         $this->em->flush();

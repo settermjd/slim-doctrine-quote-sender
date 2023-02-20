@@ -3,6 +3,7 @@
 namespace AppTest\Data\Fixtures;
 
 use App\Domain\User;
+use App\InputFilter\UserInputFilter;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -44,7 +45,7 @@ class UserDataLoader extends AbstractFixture
         ];
 
         foreach ($data as $datum) {
-            $user = new User($datum['fullName'], $datum['emailAddress'], $datum['mobileNumber']);
+            $user = new User(new UserInputFilter(), $datum['fullName'], $datum['emailAddress'], $datum['mobileNumber']);
             $manager->persist($user);
             $manager->flush();
 

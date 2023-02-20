@@ -8,6 +8,7 @@ use App\Domain\User;
 use App\Handler\EmailHandlerTrait;
 use App\Handler\Subscribe\Email\EmailSubscribeRequestHandler;
 use App\InputFilter\EmailInputFilter;
+use App\InputFilter\UserInputFilter;
 use App\Service\UserService;
 use Laminas\Diactoros\Response\RedirectResponse;
 use Mezzio\Flash\FlashMessageMiddleware;
@@ -35,7 +36,7 @@ class EmailSubscribeRequestHandlerTest extends TestCase
     public function testCanSubscribeUsersByEmailAddressAndRedirectBackToTheOriginalForm()
     {
         $emailAddress = 'email-address-user@example.org';
-        $user = new User(null, $emailAddress, null);
+        $user = new User(new UserInputFilter(), null, $emailAddress, null);
 
         $this->flashMessage
             ->expects($this->once())
