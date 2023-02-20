@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 
 class QuoteTest extends TestCase
 {
+    private Author|null $quoteAuthor;
+
     /**
      * @dataProvider quoteData
      */
@@ -30,6 +32,28 @@ class QuoteTest extends TestCase
             [
                 'Brian Kernighan',
                 "Don't comment bad code - rewrite it.",
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider quoteDataProvider
+     */
+    public function testCanValidateProperties(array $properties, bool $isValid)
+    {
+        $quote = new Quote($properties['quoteText'], $properties['quoteAuthor']);
+        $this->assertSame($isValid, $quote->isValid());
+    }
+
+    public static function quoteDataProvider()
+    {
+        return [
+            [
+                [
+                    'quoteText' => "Don't comment bad code - rewrite it.",
+                    'quoteAuthor' => new Author('Brian Kernighan'),
+                ],
+                true,
             ]
         ];
     }

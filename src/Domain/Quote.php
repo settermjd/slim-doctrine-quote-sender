@@ -8,6 +8,9 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Laminas\InputFilter\Input;
+use Laminas\InputFilter\InputFilter;
+use Laminas\Validator\NotEmpty;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 #[ORM\Entity(repositoryClass: QuoteRepository::class), ORM\Table(name: 'quotes')]
@@ -76,6 +79,22 @@ class Quote
     public function getPrintableQuote(): string
     {
         return sprintf('%s - %s', $this->quoteText, $this->quoteAuthor->getFullName());
+    }
+
+    public function isValid(): bool
+    {
+        $quoteText = new Input('quoteText');
+        $quoteText->getValidatorChain()
+            ->attach(new NotEmpty());
+
+        $inputFilter = new InputFilter();
+        $inputFilter->add($quoteText);
+
+        $inputFilter->setData([
+            'quoteText' => $this->quoteText
+        ]);
+
+        return $inputFilter->isValid() && $this->quoteAuthor->isValid();
     }
 
 }
