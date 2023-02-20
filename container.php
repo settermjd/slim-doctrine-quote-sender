@@ -1,5 +1,7 @@
 <?php
 
+use App\Domain\Quote;
+use App\Domain\User;
 use App\Handler\Subscribe\Email\EmailSubscribeRequestFormHandler;
 use App\Handler\Subscribe\Email\EmailSubscribeRequestHandler;
 use App\Handler\Subscribe\Mobile\MobileSubscribeRequestHandler;
@@ -8,6 +10,8 @@ use App\Handler\Unsubscribe\Email\EmailUnsubscribeRequestHandler;
 use App\Handler\Unsubscribe\Mobile\MobileUnsubscribeRequestHandler;
 use App\InputFilter\EmailInputFilter;
 use App\InputFilter\MobileNumberInputFilter;
+use App\Repository\QuoteRepository;
+use App\Repository\UserRepository;
 use App\Service\QuoteService;
 use App\Service\UserService;
 use DI\Container;
@@ -50,6 +54,22 @@ $container->set(EntityManager::class, static function (Container $c): EntityMana
     }
 
     return EntityManager::create($settings['doctrine']['connection'], $config);
+});
+
+$container->set(UserRepository::class, static function (Container $c): UserRepository {
+    /** @var EntityManager $entityManager */
+    $entityManager = $c->get(EntityManager::class);
+
+    /** @var UserRepository $userRepository */
+    return $entityManager->getRepository(User::class);
+});
+
+$container->set(QuoteRepository::class, static function (Container $c): QuoteRepository {
+    /** @var EntityManager $entityManager */
+    $entityManager = $c->get(EntityManager::class);
+
+    /** @var QuoteRepository $quoteRepository */
+    return $entityManager->getRepository(Quote::class);
 });
 
 $container->set(SendGrid::class, static function(Container $c): SendGrid {

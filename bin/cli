@@ -3,8 +3,8 @@
 
 use App\Command\SendDailyDeveloperQuotesToEmailUsersCommand;
 use App\Command\SendDailyDeveloperQuotesToMobileUsersCommand;
-use App\Service\QuoteService;
-use App\Service\UserService;
+use App\Repository\QuoteRepository;
+use App\Repository\UserRepository;
 use DI\Container;
 use Symfony\Component\Console\Application;
 use Twilio\Rest\Client;
@@ -29,16 +29,24 @@ $application = new Application('cli', '1.0.0');
 /** @var Container $container */
 $container = require __DIR__ . '/../container.php';
 
+/** @var UserRepository $userRepository */
+$userRepository = $container->get(UserRepository::class);
+
+/** @var QuoteRepository $quoteRepository */
+$quoteRepository = $container->get(QuoteRepository::class);
+
 $mobileUsersCommand = new SendDailyDeveloperQuotesToMobileUsersCommand(
-    $container->get(UserService::class),
-    $container->get(QuoteService::class),
+    $userRepository->getMobileUsers(),
+    $quoteRepository,
     $container->get(Client::class)
 );
+
 $emailUsersCommand = new SendDailyDeveloperQuotesToEmailUsersCommand(
-    $container->get(UserService::class),
-    $container->get(QuoteService::class),
+    $userRepository->getEmailUsers(),
+    $quoteRepository,
     $container->get(SendGrid::class)
 );
+
 $application->add($mobileUsersCommand);
 $application->add($emailUsersCommand);
 
