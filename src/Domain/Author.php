@@ -13,6 +13,8 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 #[ORM\Entity, ORM\Table(name: 'quote_authors')]
 class Author
 {
+    use TimestampableEntity;
+
     #[
         ORM\Id,
         ORM\Column(name: "author_id", type: 'uuid'),
@@ -24,16 +26,11 @@ class Author
     #[ORM\Column(name: "full_name", type: 'string', length: 200, unique: true, nullable: false)]
     private string $fullName;
 
-    #[ORM\Column(name: 'created_at', type: 'datetimetz_immutable', nullable: false)]
-    private DateTimeImmutable $createdAt;
-
     #[ORM\OneToMany(targetEntity: Quote::class, mappedBy: 'quote')]
     private Collection $quotes;
 
     public function __construct(string $fullName)
     {
-        $this->createdAt = new DateTimeImmutable('now');
-
         $this->fullName = $fullName;
         $this->quotes = new ArrayCollection();
     }

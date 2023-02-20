@@ -11,10 +11,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Laminas\Validator\EmailAddress;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 
-#[ORM\Entity, ORM\Table(name: 'quote_users')]
+#[ORM\Entity(repositoryClass: UserRepository::class), ORM\Table(name: 'quote_users')]
 #[ORM\HasLifecycleCallbacks]
 class User
 {
+    use TimestampableEntity;
+
     #[
         ORM\Id,
         ORM\Column(name: "user_id", type: 'uuid'),
@@ -31,9 +33,6 @@ class User
 
     #[ORM\Column(name: "email_address", type: 'text', unique: true, nullable: true)]
     private string|null $emailAddress = null;
-
-    #[ORM\Column(name: 'registered_at', type: 'datetimetz_immutable', nullable: false)]
-    private DateTimeImmutable $registeredAt;
 
     /**
      * Bidirectional - Many users have viewed many quotes (OWNING SIDE)

@@ -10,9 +10,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 
-#[ORM\Entity, ORM\Table(name: 'quotes')]
+#[ORM\Entity(repositoryClass: QuoteRepository::class), ORM\Table(name: 'quotes')]
 class Quote
 {
+    use TimestampableEntity;
+
     #[
         ORM\Id,
         ORM\Column(name: "quote_id", type: 'uuid'),
@@ -28,9 +30,6 @@ class Quote
     #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'author_id')]
     private Author|null $quoteAuthor = null;
 
-    #[ORM\Column(name: 'created_at', type: 'datetimetz_immutable', nullable: false)]
-    private DateTimeImmutable $createdAt;
-
     /**
      * Bidirectional - Many quotes can be viewed by many users (INVERSE SIDE)
      *
@@ -41,7 +40,6 @@ class Quote
 
     public function __construct(string $quoteText, Author $quoteAuthor)
     {
-        $this->createdAt = new DateTimeImmutable('now');
         $this->quoteText = $quoteText;
         $this->quoteAuthor = $quoteAuthor;
         $this->userQuoteViews = new ArrayCollection();
