@@ -1,8 +1,8 @@
 #!/usr/bin/env php
 <?php
 
-use App\Command\SendDailyDeveloperQuotesToEmailUsersCommand;
-use App\Command\SendDailyDeveloperQuotesToMobileUsersCommand;
+use App\Command\DailyDeveloperQuotes\SendToEmailUsersCommand;
+use App\Command\DailyDeveloperQuotes\SendToMobileUsersCommand;
 use App\Repository\QuoteRepository;
 use App\Repository\UserRepository;
 use DI\Container;
@@ -35,13 +35,13 @@ $userRepository = $container->get(UserRepository::class);
 /** @var QuoteRepository $quoteRepository */
 $quoteRepository = $container->get(QuoteRepository::class);
 
-$mobileUsersCommand = new SendDailyDeveloperQuotesToMobileUsersCommand(
+$mobileUsersCommand = new SendToMobileUsersCommand(
     $userRepository->getMobileUsers(),
     $quoteRepository,
     $container->get(Client::class)
 );
 
-$emailUsersCommand = new SendDailyDeveloperQuotesToEmailUsersCommand(
+$emailUsersCommand = new SendToEmailUsersCommand(
     $userRepository->getEmailUsers(),
     $quoteRepository,
     $container->get(SendGrid::class)

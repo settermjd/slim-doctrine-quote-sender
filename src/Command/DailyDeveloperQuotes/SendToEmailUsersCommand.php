@@ -2,13 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Command;
+namespace App\Command\DailyDeveloperQuotes;
 
 use App\Domain\Quote;
 use App\Domain\User;
 use App\Repository\QuoteRepository;
-use App\Service\QuoteService;
-use App\Service\UserService;
 use SendGrid\Mail\HtmlContent;
 use SendGrid\Mail\Mail;
 use SendGrid\Mail\Personalization;
@@ -21,10 +19,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
-    name: 'daily-developer-quotes:email-users',
+    name: 'quotes:developer:email-users',
     description: 'Send daily developer quotes to email users.',
 )]
-class SendDailyDeveloperQuotesToEmailUsersCommand extends Command
+class SendToEmailUsersCommand extends Command
 {
     /**
      * @param array<int,User> $emailUsers

@@ -54,10 +54,10 @@ For example, if you were using Cron, add the following to the relevant user's [C
 
 ```bash
 # Add an entry to send quotes to email users every Monday to Friday at 8am.
-0 8 * * 1-5 bin/cli daily-developer-quotes:email-users >/dev/null 2>&1
+0 8 * * 1-5 bin/cli quotes:developer:email-users >/dev/null 2>&1
 
 # Add an entry to send quotes to mobile users every Monday to Friday at 8am.
-0 8 * * 1-5 bin/cli daily-developer-quotes:mobile-users >/dev/null 2>&1
+0 8 * * 1-5 bin/cli quotes:developer:mobile-users >/dev/null 2>&1
 ```
 
 [Use Crontab Generator](https://crontab-generator.org/) to save time generating a Crontab entry.

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Command;
+namespace App\Command\DailyDeveloperQuotes;
 
 use App\Repository\QuoteRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -12,10 +12,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Twilio\Rest\Client;
 
 #[AsCommand(
-    name: 'daily-developer-quotes:mobile-users',
+    name: 'quotes:developer:mobile-users',
     description: 'Send daily developer quotes to mobile users.',
 )]
-class SendDailyDeveloperQuotesToMobileUsersCommand extends Command
+class SendToMobileUsersCommand extends Command
 {
     public function __construct(
         private readonly array           $users,

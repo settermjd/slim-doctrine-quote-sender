@@ -1,13 +1,11 @@
 <?php
 
-namespace AppTest\Command;
+namespace AppTest\Command\DailyDeveloperQuotes;
 
-use App\Command\SendDailyDeveloperQuotesToMobileUsersCommand;
+use App\Command\DailyDeveloperQuotes\SendToMobileUsersCommand;
 use App\Domain\Quote;
 use App\Domain\User;
 use App\Repository\QuoteRepository;
-use App\Service\QuoteService;
-use App\Service\UserService;
 use AppTest\Data\Fixtures\QuoteAuthorDataLoader;
 use AppTest\Data\Fixtures\QuoteDataLoader;
 use AppTest\Data\Fixtures\UserDataLoader;
@@ -24,7 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Twilio\Rest\Api\V2010\Account\MessageList;
 use Twilio\Rest\Client;
 
-class SendDailyDeveloperQuotesToMobileUsersCommandTest extends TestCase
+class SendToMobileUsersCommandTest extends TestCase
 {
     private EntityManager $entityManager;
     private ORMPurger $purger;
@@ -32,7 +30,7 @@ class SendDailyDeveloperQuotesToMobileUsersCommandTest extends TestCase
     public function setUp(): void
     {
         /** @var ContainerInterface $container */
-        $container = require_once __DIR__ . '/../../container.php';
+        $container = require_once __DIR__ . '/../../../container.php';
 
         $loader = new Loader();
         $loader->addFixture(new UserDataLoader());
@@ -108,7 +106,7 @@ class SendDailyDeveloperQuotesToMobileUsersCommandTest extends TestCase
             ->with($user)
             ->willReturn($quote);
 
-        $command = new SendDailyDeveloperQuotesToMobileUsersCommand([$user], $quoteRepository, $client);
+        $command = new SendToMobileUsersCommand([$user], $quoteRepository, $client);
 
         $output = $this->createMock(OutputInterface::class);
         $output
