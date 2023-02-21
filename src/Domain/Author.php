@@ -29,7 +29,7 @@ class Author
     #[ORM\Column(name: "full_name", type: 'string', length: 200, unique: true, nullable: false)]
     private string $fullName;
 
-    #[ORM\OneToMany(targetEntity: Quote::class, mappedBy: 'quote')]
+    #[ORM\OneToMany(mappedBy: 'quote', targetEntity: Quote::class)]
     private Collection $quotes;
 
     public function __construct(string $fullName)

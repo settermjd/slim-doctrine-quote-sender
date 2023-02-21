@@ -99,7 +99,7 @@ class User
         return $this->quotes;
     }
 
-    public function addViewedQuote(Quote $quote)
+    public function addViewedQuote(Quote $quote): void
     {
         $this->quotes->add($quote);
     }
