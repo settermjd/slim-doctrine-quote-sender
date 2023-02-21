@@ -3,7 +3,7 @@
 namespace AppTest\Service;
 
 use App\Domain\User;
-use App\QuoteType;
+use App\Exception\ValidationException;
 use App\Service\UserService;
 use AppTest\Data\Fixtures\QuoteAuthorDataLoader;
 use AppTest\Data\Fixtures\QuoteDataLoader;
@@ -171,7 +171,7 @@ class UserServiceTest extends TestCase
         string $emailAddress = null,
         string $mobileNumber = null
     ) {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         $this->expectExceptionMessage(
             'Entity is not in a valid state. Reason: Mobile number must be in E.164 format. More information is available at https://www.twilio.com/docs/glossary/what-e164.'
         );
@@ -184,14 +184,14 @@ class UserServiceTest extends TestCase
         return [
             [
                 Uuid::uuid4()->toString(),
-                'User 3',
-                'user3@example.org',
+                'User 11',
+                'user11@example.org',
                 '00114155552671'
             ],
             [
                 Uuid::uuid4()->toString(),
-                'User 4',
-                'user4@example.org',
+                'User 12',
+                'user12@example.org',
                 '04155552671'
             ],
         ];
@@ -206,7 +206,7 @@ class UserServiceTest extends TestCase
         string $emailAddress = null,
         string $mobileNumber = null
     ) {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(ValidationException::class);
         $userService = new UserService($this->entityManager);
         $userService->create($userId, $fullName, $emailAddress, $mobileNumber);
     }
@@ -216,14 +216,14 @@ class UserServiceTest extends TestCase
         return [
             [
                 Uuid::uuid4()->toString(),
-                'User 3',
-                'user3@org',
+                'User 11',
+                'user11@org',
                 '+14155552671'
             ],
             [
                 Uuid::uuid4()->toString(),
-                'User 4',
-                'user4@example',
+                'User 12',
+                'user12@example',
                 null
             ],
         ];

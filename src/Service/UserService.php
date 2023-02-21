@@ -22,7 +22,7 @@ class UserService
         string $mobileNumber = null
     ): User
     {
-        $newUser = new User(new UserInputFilter(), $userId, $fullName, $emailAddress, $mobileNumber);
+        $newUser = new User($userId, $fullName, $emailAddress, $mobileNumber);
 
         $this->em->persist($newUser);
         $this->em->flush();
@@ -38,7 +38,6 @@ class UserService
         }
 
         $newUser = new User(
-            new UserInputFilter(),
             Uuid::uuid4()->toString(),
             null,
             null,
@@ -59,7 +58,6 @@ class UserService
         }
 
         $newUser = new User(
-            new UserInputFilter(),
             Uuid::uuid4()->toString(),
             null,
             $emailAddress,

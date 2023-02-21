@@ -60,7 +60,6 @@ class SendToMobileUsersCommandTest extends TestCase
     public function testCanSendDeveloperQuotesToMobileUsers()
     {
         $twilioNumber = '+15017122661';
-
         $mobileNumber = '+14155552672';
         /** @var User $user */
         $user = $this->entityManager

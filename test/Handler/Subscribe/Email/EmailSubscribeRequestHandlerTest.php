@@ -38,7 +38,7 @@ class EmailSubscribeRequestHandlerTest extends TestCase
     {
         $emailAddress = 'email-address-user@example.org';
         $uuid = Uuid::uuid4();
-        $user = new User(new UserInputFilter(), $uuid->toString(), null, $emailAddress, null);
+        $user = new User($uuid->toString(), null, $emailAddress, null);
 
         $this->flashMessage
             ->expects($this->once())

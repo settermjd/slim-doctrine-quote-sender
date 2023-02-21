@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Domain;
 
+use App\Exception\ValidationException;
+use App\InputFilter\MobileNumberInputFilter;
+use App\InputFilter\UserInputFilter;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Laminas\InputFilter\InputFilterInterface;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 #[ORM\Entity(repositoryClass: UserRepository::class), ORM\Table(name: 'quote_users')]
@@ -46,7 +48,6 @@ class User
     private Collection $quotes;
 
     public function __construct(
-        private InputFilterInterface $inputFilter,
         string $userId,
         string $fullName = null,
         string $emailAddress = null,
@@ -57,23 +58,6 @@ class User
         $this->fullName = $fullName;
         $this->mobileNumber = $mobileNumber;
         $this->quotes = new ArrayCollection();
-
-        if (! $this->isValid()) {
-            $reason = '';
-            $messages = $this->inputFilter->getMessages();
-
-            if (array_key_exists('mobileNumber', $messages)) {
-                $reason .= implode(', ', $messages['mobileNumber']);
-            }
-
-            if (array_key_exists('emailAddress', $messages)) {
-                $reason .= implode(', ', $messages['emailAddress']);
-            }
-
-            throw new \InvalidArgumentException(
-                sprintf('Entity is not in a valid state. Reason: %s', $reason)
-            );
-        }
     }
 
     public function getUserId(): string
@@ -121,16 +105,38 @@ class User
         return $quotes;
     }
 
+    /**
+     * @throws ValidationException
+     */
+    #[ORM\PrePersist, ORM\PreUpdate]
     public function isValid(): bool
     {
-        $this->inputFilter->setData([
+        $filter = new UserInputFilter();
+        $filter->setData([
             'userId' => $this->userId,
             'emailAddress' => $this->emailAddress,
             'fullName' => $this->fullName,
             'mobileNumber' => $this->mobileNumber,
         ]);
 
-        return $this->inputFilter->isValid();
+        if (! $filter->isValid()) {
+            $reason = '';
+            $messages = $filter->getMessages();
+
+            if (array_key_exists('mobileNumber', $messages)) {
+                $reason .= implode(', ', $messages['mobileNumber']);
+            }
+
+            if (array_key_exists('emailAddress', $messages)) {
+                $reason .= implode(', ', $messages['emailAddress']);
+            }
+
+            throw new ValidationException(
+                sprintf('Entity is not in a valid state. Reason: %s', $reason)
+            );
+        }
+
+        return true;
     }
 
 }

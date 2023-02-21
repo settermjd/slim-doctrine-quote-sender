@@ -53,7 +53,6 @@ class UserDataLoader extends AbstractFixture
 
         foreach ($data as $datum) {
             $user = new User(
-                new UserInputFilter(),
                 $datum['userId'],
                 $datum['fullName'],
                 $datum['emailAddress'],
