@@ -17,6 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Ramsey\Uuid\Uuid;
 
 class EmailSubscribeRequestHandlerTest extends TestCase
 {
@@ -36,7 +37,8 @@ class EmailSubscribeRequestHandlerTest extends TestCase
     public function testCanSubscribeUsersByEmailAddressAndRedirectBackToTheOriginalForm()
     {
         $emailAddress = 'email-address-user@example.org';
-        $user = new User(new UserInputFilter(), null, $emailAddress, null);
+        $uuid = Uuid::uuid4();
+        $user = new User(new UserInputFilter(), $uuid->toString(), null, $emailAddress, null);
 
         $this->flashMessage
             ->expects($this->once())

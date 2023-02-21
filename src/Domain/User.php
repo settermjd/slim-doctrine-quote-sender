@@ -47,10 +47,12 @@ class User
 
     public function __construct(
         private InputFilterInterface $inputFilter,
+        string $userId,
         string $fullName = null,
         string $emailAddress = null,
         string $mobileNumber = null
     ) {
+        $this->userId = $userId;
         $this->emailAddress = $emailAddress;
         $this->fullName = $fullName;
         $this->mobileNumber = $mobileNumber;
@@ -122,6 +124,7 @@ class User
     public function isValid(): bool
     {
         $this->inputFilter->setData([
+            'userId' => $this->userId,
             'emailAddress' => $this->emailAddress,
             'fullName' => $this->fullName,
             'mobileNumber' => $this->mobileNumber,

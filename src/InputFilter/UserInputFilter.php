@@ -6,11 +6,18 @@ use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
 use Laminas\Validator\EmailAddress;
 use Laminas\Validator\Regex;
+use Laminas\Validator\Uuid;
 
 class UserInputFilter extends InputFilter
 {
     public function __construct()
     {
+        $userId = new Input('userId');
+        $userId->setAllowEmpty(false);
+        $userId
+            ->getValidatorChain()
+            ->attach(new Uuid());
+
         $fullName = new Input('fullName');
         $fullName->setAllowEmpty(true);
 
@@ -32,6 +39,7 @@ class UserInputFilter extends InputFilter
             ->attach($mobileNumberValidator);
         $mobileNumber->setAllowEmpty(true);
 
+        $this->add($userId);
         $this->add($fullName);
         $this->add($emailAddress);
         $this->add($mobileNumber);

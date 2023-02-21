@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Domain\Quote;
 use App\Domain\User;
 use App\InputFilter\UserInputFilter;
 use Doctrine\ORM\EntityManager;
+use Ramsey\Uuid\Uuid;
 
 class UserService
 {
@@ -15,9 +15,14 @@ class UserService
     {
     }
 
-    public function create(string $fullName = null, string $emailAddress = null, string $mobileNumber = null): User
+    public function create(
+        string $userId,
+        string $fullName = null,
+        string $emailAddress = null,
+        string $mobileNumber = null
+    ): User
     {
-        $newUser = new User(new UserInputFilter(), $fullName, $emailAddress, $mobileNumber);
+        $newUser = new User(new UserInputFilter(), $userId, $fullName, $emailAddress, $mobileNumber);
 
         $this->em->persist($newUser);
         $this->em->flush();
@@ -32,7 +37,13 @@ class UserService
             return $user;
         }
 
-        $newUser = new User(new UserInputFilter(), null, null, $mobileNumber);
+        $newUser = new User(
+            new UserInputFilter(),
+            Uuid::uuid4()->toString(),
+            null,
+            null,
+            $mobileNumber
+        );
 
         $this->em->persist($newUser);
         $this->em->flush();
@@ -47,7 +58,13 @@ class UserService
             return $user;
         }
 
-        $newUser = new User(new UserInputFilter(), null, $emailAddress, null);
+        $newUser = new User(
+            new UserInputFilter(),
+            Uuid::uuid4()->toString(),
+            null,
+            $emailAddress,
+            null
+        );
 
         $this->em->persist($newUser);
         $this->em->flush();

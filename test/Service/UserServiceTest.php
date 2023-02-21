@@ -14,6 +14,8 @@ use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManager;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
+use Ramsey\Uuid\Uuid;
 
 class UserServiceTest extends TestCase
 {
@@ -22,7 +24,7 @@ class UserServiceTest extends TestCase
 
     public function setUp(): void
     {
-        /** @var \Psr\Container\ContainerInterface $container */
+        /** @var ContainerInterface $container */
         $container = require_once __DIR__ . '/../../container.php';
 
         $loader = new Loader();
@@ -54,12 +56,13 @@ class UserServiceTest extends TestCase
      * @dataProvider createUserDataProvider
      */
     public function testUserServiceCanCreateNewUserWithAnyCombinationOfUserDetails(
+        string $userId,
         string $fullName = null,
         string $emailAddress = null,
         string $mobileNumber = null
     ) {
         $userService = new UserService($this->entityManager);
-        $user = $userService->create($fullName, $emailAddress, $mobileNumber);
+        $user = $userService->create($userId, $fullName, $emailAddress, $mobileNumber);
 
         $this->assertInstanceOf(User::class, $user);
         $this->assertTrue($this->entityManager->contains($user));
@@ -69,26 +72,31 @@ class UserServiceTest extends TestCase
     {
         return [
             [
+                Uuid::uuid4()->toString(),
                 'User 11',
                 'user11@example.org',
                 null
             ],
             [
+                Uuid::uuid4()->toString(),
                 'User 12',
                 'user12@example.org',
                 '+14155552691'
             ],
             [
+                Uuid::uuid4()->toString(),
                 null,
                 'user13@example.org',
                 null
             ],
             [
+                Uuid::uuid4()->toString(),
                 null,
                 null,
                 '+14155552692'
             ],
             [
+                Uuid::uuid4()->toString(),
                 'User 16',
                 null,
                 null,
@@ -158,6 +166,7 @@ class UserServiceTest extends TestCase
      * @dataProvider invalidMobilePhoneNumberDataProvider
      */
     public function testUserServiceCannotCreateNewUserWithInvalidMobileNumber(
+        string $userId,
         string $fullName,
         string $emailAddress = null,
         string $mobileNumber = null
@@ -167,18 +176,20 @@ class UserServiceTest extends TestCase
             'Entity is not in a valid state. Reason: Mobile number must be in E.164 format. More information is available at https://www.twilio.com/docs/glossary/what-e164.'
         );
         $userService = new UserService($this->entityManager);
-        $userService->create($fullName, $emailAddress, $mobileNumber);
+        $userService->create($userId, $fullName, $emailAddress, $mobileNumber);
     }
 
     public static function invalidMobilePhoneNumberDataProvider(): array
     {
         return [
             [
+                Uuid::uuid4()->toString(),
                 'User 3',
                 'user3@example.org',
                 '00114155552671'
             ],
             [
+                Uuid::uuid4()->toString(),
                 'User 4',
                 'user4@example.org',
                 '04155552671'
@@ -190,24 +201,27 @@ class UserServiceTest extends TestCase
      * @dataProvider invalidEmailAddressDataProvider
      */
     public function testUserServiceCannotCreateNewUserWithInvalidEmailAddress(
+        string $userId,
         string $fullName,
         string $emailAddress = null,
         string $mobileNumber = null
     ) {
         $this->expectException(\InvalidArgumentException::class);
         $userService = new UserService($this->entityManager);
-        $userService->create($fullName, $emailAddress, $mobileNumber);
+        $userService->create($userId, $fullName, $emailAddress, $mobileNumber);
     }
 
     public static function invalidEmailAddressDataProvider(): array
     {
         return [
             [
+                Uuid::uuid4()->toString(),
                 'User 3',
                 'user3@org',
                 '+14155552671'
             ],
             [
+                Uuid::uuid4()->toString(),
                 'User 4',
                 'user4@example',
                 null

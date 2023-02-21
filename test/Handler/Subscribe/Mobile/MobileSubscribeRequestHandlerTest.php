@@ -13,6 +13,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Ramsey\Uuid\Uuid;
 
 class MobileSubscribeRequestHandlerTest extends TestCase
 {
@@ -28,7 +29,7 @@ class MobileSubscribeRequestHandlerTest extends TestCase
     public function testCanSubscribeUserByMobileWithMobileNumberInE164Format()
     {
         $mobileNumber = '+14155552672';
-        $user = new User(new UserInputFilter(), '', null, $mobileNumber);
+        $user = new User(new UserInputFilter(), Uuid::uuid4()->toString(), '', null, $mobileNumber);
 
         $this->userService
             ->expects($this->once())
