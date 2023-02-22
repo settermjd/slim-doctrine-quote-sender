@@ -30,12 +30,6 @@ class MobileSubscribeRequestHandler
         'yes',
     ];
 
-    public const REGEX_MOBILE_NUMBER = '^\+[1-9]\d{1,14}$';
-    public const RESPONSE_MESSAGE_SUCCESSFULLY_SUBSCRIBED = <<<EOF
-You are now subscribed to the daily developer quotes service. 
-To unsubscribe, send another SMS to this number with the text: UNSUBSCRIBE
-EOF;
-
     public function __construct(
         private readonly UserService $userService,
         private readonly InputFilterInterface $inputFilter
@@ -59,6 +53,7 @@ EOF;
         }
 
         $this->userService->createWithMobileNumber($params['From']);
+
         return new EmptyResponse();
     }
 }

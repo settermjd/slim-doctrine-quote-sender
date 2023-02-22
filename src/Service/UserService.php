@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Domain\User;
-use App\InputFilter\UserInputFilter;
 use Doctrine\ORM\EntityManager;
 use Ramsey\Uuid\Uuid;
 

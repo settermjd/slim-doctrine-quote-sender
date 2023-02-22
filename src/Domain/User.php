@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Domain;
 
 use App\Exception\ValidationException;
-use App\InputFilter\MobileNumberInputFilter;
 use App\InputFilter\UserInputFilter;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -107,6 +106,7 @@ class User
     public function isValid(): bool
     {
         $filter = new UserInputFilter();
+
         $filter->setData([
             'userId' => $this->userId,
             'emailAddress' => $this->emailAddress,
