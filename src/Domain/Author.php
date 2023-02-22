@@ -38,19 +38,9 @@ class Author
         $this->quotes = new ArrayCollection();
     }
 
-    public function getAuthorId(): string
-    {
-        return $this->authorId;
-    }
-
     public function getFullName(): string
     {
         return $this->fullName;
-    }
-
-    public function getQuotes(): Collection
-    {
-        return $this->quotes;
     }
 
     public function isValid(): bool

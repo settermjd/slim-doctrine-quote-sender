@@ -63,11 +63,6 @@ class Quote
         return $this->quoteAuthor;
     }
 
-    public function getUserQuoteViews(): Collection
-    {
-        return $this->userQuoteViews;
-    }
-
     public function addView(User $user): void
     {
         $this->userQuoteViews[] = $user;

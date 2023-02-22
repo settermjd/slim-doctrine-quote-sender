@@ -60,11 +60,6 @@ class User
         $this->quotes = new ArrayCollection();
     }
 
-    public function getUserId(): string
-    {
-        return $this->userId;
-    }
-
     public function getEmailAddress(): ?string
     {
         return $this->emailAddress;
