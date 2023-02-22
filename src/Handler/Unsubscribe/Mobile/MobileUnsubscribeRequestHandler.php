@@ -29,14 +29,10 @@ class MobileUnsubscribeRequestHandler
         'unsubscribe',
     ];
 
-    public const RESPONSE_MESSAGE_SUCCESSFULLY_UNSUBSCRIBED = <<<EOF
-You are now unsubscribed from the daily developer quotes service. 
-To resubscribe, send another SMS to this number with the text: SUBSCRIBE.
-EOF;
-
-    public function __construct(private readonly UserService $userService, private readonly InputFilterInterface $inputFilter)
-    {
-    }
+    public function __construct(
+        private readonly UserService $userService,
+        private readonly InputFilterInterface $inputFilter
+    ) {}
 
     public function handle(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {

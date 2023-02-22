@@ -9,6 +9,7 @@ trait MobileInputTrait
 {
     public const REGEX_E164 = '/^\+[1-9]\d{1,14}$/';
     public const RESPONSE_MESSAGE_INVALID_MOBILE_NUMBER = 'Mobile number must be in E.164 format. More information is available at https://www.twilio.com/docs/glossary/what-e164.';
+    public const RESPONSE_UNKNOWN_REQUEST = 'Sorry, but that message was not understood. To subscribe, send an SMS to this number with the word SUBSCRIBE. To unsubscribe, send an SMS to this number with the word UNSUBSCRIBE.';
 
     public function getMobileNumberInput(): Input
     {
