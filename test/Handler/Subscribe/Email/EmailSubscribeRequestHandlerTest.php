@@ -55,7 +55,7 @@ class EmailSubscribeRequestHandlerTest extends TestCase
             ->expects($this->once())
             ->method('getParsedBody')
             ->willReturn([
-                'email' => $emailAddress
+                'emailAddress' => $emailAddress
             ]);
         $this->request
             ->expects($this->once())
@@ -87,7 +87,7 @@ class EmailSubscribeRequestHandlerTest extends TestCase
             ->expects($this->once())
             ->method('getParsedBody')
             ->willReturn([
-                'email' => $emailAddress
+                'emailAddress' => $emailAddress
             ]);
         $this->request
             ->expects($this->once())

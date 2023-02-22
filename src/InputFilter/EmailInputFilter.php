@@ -13,18 +13,10 @@ use Laminas\Validator\EmailAddress;
 
 class EmailInputFilter extends InputFilter
 {
+    use EmailInputTrait;
+
     public function __construct()
     {
-        $emailInput = new Input('email');
-        $emailInput
-            ->getValidatorChain()
-            ->attachByName(EmailAddress::class);
-        $emailInput
-            ->getFilterChain()
-            ->attachByName(StripTags::class)
-            ->attachByName(StripNewlines::class)
-            ->attachByName(StringTrim::class);
-
-        $this->add($emailInput);
+        $this->add($this->getEmailInput());
     }
 }

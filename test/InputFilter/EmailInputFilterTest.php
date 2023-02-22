@@ -14,7 +14,7 @@ class EmailInputFilterTest extends TestCase
     {
         $inputFilter = new EmailInputFilter();
         $inputFilter->setData([
-            'email' => $email,
+            'emailAddress' => $email,
         ]);
 
         $this->assertSame($isValid, $inputFilter->isValid());

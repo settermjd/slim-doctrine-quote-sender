@@ -34,7 +34,7 @@ class EmailSubscribeRequestHandler
         if ($this->inputFilter->isValid()) {
             $this->userService
                 ->createWithEmailAddress(
-                    $this->inputFilter->getValue('email')
+                    $this->inputFilter->getValue('emailAddress')
                 );
 
             $flashMessage->flash('status', self::RESPONSE_MESSAGE_SUBSCRIBE_SUCCESS);

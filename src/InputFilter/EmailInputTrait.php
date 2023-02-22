@@ -8,25 +8,22 @@ use Laminas\Filter\StringTrim;
 use Laminas\Filter\StripNewlines;
 use Laminas\Filter\StripTags;
 use Laminas\InputFilter\Input;
-use Laminas\InputFilter\InputFilter;
-use Laminas\Validator\Regex;
+use Laminas\Validator\EmailAddress;
 
-class MobileNumberInputFilter extends InputFilter
+trait EmailInputTrait
 {
-    use MobileInputTrait;
-
-    public function __construct()
+    public function getEmailInput(): Input
     {
-        $mobileNumberInput = new Input('mobileNumber');
-        $mobileNumberInput
+        $emailInput = new Input('emailAddress');
+        $emailInput
             ->getValidatorChain()
-            ->attach(new Regex(self::REGEX_E164));
-        $mobileNumberInput
+            ->attachByName(EmailAddress::class);
+        $emailInput
             ->getFilterChain()
             ->attachByName(StripTags::class)
             ->attachByName(StripNewlines::class)
             ->attachByName(StringTrim::class);
 
-        $this->add($mobileNumberInput);
+        return $emailInput;
     }
 }
