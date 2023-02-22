@@ -4,6 +4,7 @@ namespace AppTest\Service;
 
 use App\Domain\User;
 use App\Exception\ValidationException;
+use App\InputFilter\MobileInputTrait;
 use App\Service\UserService;
 use AppTest\Data\Fixtures\QuoteAuthorDataLoader;
 use AppTest\Data\Fixtures\QuoteDataLoader;
@@ -19,6 +20,8 @@ use Ramsey\Uuid\Uuid;
 
 class UserServiceTest extends TestCase
 {
+    use MobileInputTrait;
+
     private EntityManager|null $entityManager;
     private ORMPurger $purger;
 
@@ -173,7 +176,10 @@ class UserServiceTest extends TestCase
     ) {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage(
-            'Entity is not in a valid state. Reason: Mobile number must be in E.164 format. More information is available at https://www.twilio.com/docs/glossary/what-e164.'
+            sprintf(
+                'Entity is not in a valid state. Reason: %s',
+                self::RESPONSE_MESSAGE_INVALID_MOBILE_NUMBER
+            )
         );
         $userService = new UserService($this->entityManager);
         $userService->create($userId, $fullName, $emailAddress, $mobileNumber);

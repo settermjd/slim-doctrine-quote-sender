@@ -3,6 +3,7 @@
 namespace AppTest\Handler\Unsubscribe\Mobile;
 
 use App\Handler\Unsubscribe\Mobile\MobileUnsubscribeRequestHandler;
+use App\InputFilter\MobileInputTrait;
 use App\InputFilter\MobileNumberInputFilter;
 use App\Service\UserService;
 use Laminas\Diactoros\Response\EmptyResponse;
@@ -14,6 +15,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class MobileUnsubscribeRequestHandlerTest extends TestCase
 {
+    use MobileInputTrait;
+
     private MockObject|ServerRequestInterface $request;
     private MockObject|UserService $userService;
 
@@ -70,10 +73,13 @@ class MobileUnsubscribeRequestHandlerTest extends TestCase
 
         $twiml = <<<EOF
 <?xml version="1.0" encoding="UTF-8"?>
-<Response><Message>Mobile number must be in E.164 format. More information is available at https://www.twilio.com/docs/glossary/what-e164.</Message></Response>
+<Response><Message>%s</Message></Response>
 
 EOF;
-        $this->assertSame($twiml, $result->getBody()->getContents());
+        $this->assertSame(
+            sprintf($twiml, self::RESPONSE_MESSAGE_INVALID_MOBILE_NUMBER),
+            $result->getBody()->getContents()
+        );
     }
 
 }

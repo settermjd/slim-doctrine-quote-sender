@@ -2,6 +2,7 @@
 
 namespace App\Handler\Unsubscribe\Mobile;
 
+use App\InputFilter\MobileInputTrait;
 use App\Service\UserService;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\XmlResponse;
@@ -12,6 +13,8 @@ use Twilio\TwiML\MessagingResponse;
 
 class MobileUnsubscribeRequestHandler
 {
+    use MobileInputTrait;
+
     /**
      * The list of the keywords that a user can use to unsubscribe
      *
@@ -30,8 +33,6 @@ class MobileUnsubscribeRequestHandler
 You are now unsubscribed from the daily developer quotes service. 
 To resubscribe, send another SMS to this number with the text: SUBSCRIBE.
 EOF;
-
-    public const RESPONSE_MESSAGE_INVALID_MOBILE_NUMBER = 'Mobile number must be in E.164 format. More information is available at https://www.twilio.com/docs/glossary/what-e164.';
 
     public function __construct(private readonly UserService $userService, private readonly InputFilterInterface $inputFilter)
     {
