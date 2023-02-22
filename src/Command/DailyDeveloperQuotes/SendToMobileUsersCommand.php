@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command\DailyDeveloperQuotes;
 
+use App\Domain\User;
 use App\Repository\QuoteRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -18,6 +19,9 @@ use Twilio\Rest\Client;
 class SendToMobileUsersCommand extends Command
 {
     public function __construct(
+        /**
+         * @var array<int,User>
+         */
         private readonly array           $users,
         private readonly QuoteRepository $quoteRepository,
         private readonly Client          $client
