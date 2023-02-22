@@ -3,8 +3,8 @@
 namespace App\Repository;
 
 use App\Domain\Quote;
+use App\Domain\QuoteType;
 use App\Domain\User;
-use App\QuoteType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;

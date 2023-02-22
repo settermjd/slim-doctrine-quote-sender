@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace AppTest\Service;
 
 use App\Domain\Quote;
+use App\Domain\QuoteType;
 use App\Domain\User;
-use App\QuoteType;
 use App\Repository\UserRepository;
 use App\Service\QuoteService;
 use App\Service\UserService;

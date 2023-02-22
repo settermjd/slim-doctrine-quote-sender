@@ -2,8 +2,8 @@
 
 namespace AppTest\Repository;
 
+use App\Domain\QuoteType;
 use App\Domain\User;
-use App\QuoteType;
 use App\Repository\UserRepository;
 use App\Service\UserService;
 use AppTest\Data\Fixtures\QuoteAuthorDataLoader;
